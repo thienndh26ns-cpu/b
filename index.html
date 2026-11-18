@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberGuard AI - Hệ Thống Giám Sát An Toàn Thông Tin & Mạng Công Cộng</title>
+    <title>CyberGuard AI 2.0 - Hệ Thống Phòng Vệ & Ứng Cứu An Toàn Thông Tin</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --bg-dark: #060b14;
-            --bg-card: rgba(17, 25, 40, 0.9);
+            --bg-card: rgba(17, 25, 40, 0.92);
             --border: rgba(56, 189, 248, 0.25);
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
@@ -56,96 +57,99 @@
             margin-bottom: 14px;
             line-height: 1.2;
         }
-        #welcomeScreen p {
-            color: var(--text-muted);
-            max-width: 680px;
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
+        #welcomeScreen p { color: var(--text-muted); max-width: 700px; font-size: 1.08rem; margin-bottom: 30px; }
         .btn-primary {
             background: linear-gradient(135deg, #0284c7, #4f46e5);
-            color: #fff;
-            border: none;
-            padding: 15px 36px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 999px;
-            cursor: pointer;
-            box-shadow: 0 10px 28px rgba(56, 189, 248, 0.3);
+            color: #fff; border: none; padding: 15px 36px; font-size: 1.1rem; font-weight: 700;
+            border-radius: 999px; cursor: pointer; box-shadow: 0 10px 28px rgba(56, 189, 248, 0.3);
             transition: transform 0.2s;
         }
         .btn-primary:hover { transform: translateY(-2px); }
-        .feature-pills { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 40px; }
-        .feature-pills span { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 10px; font-size: 0.88rem; color: var(--text-muted); }
+        .feature-pills { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 38px; }
+        .feature-pills span { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 8px 14px; border-radius: 10px; font-size: 0.86rem; color: var(--text-muted); }
 
-        /* ================= MAIN APP & TABS ================= */
-        #mainApp { display: none; }
+        /* ================= MAIN APP & NAVIGATION ================= */
+        #mainApp { display: none; padding-bottom: 60px; }
         header {
-            background: rgba(6, 11, 20, 0.92);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border);
-            padding: 14px 24px;
+            background: rgba(6, 11, 20, 0.94); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border); padding: 12px 20px;
             position: sticky; top: 0; z-index: 100;
         }
-        .header-inner { max-width: 1180px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-        .brand { font-size: 1.3rem; font-weight: 800; color: var(--cyan); cursor: pointer; }
-        .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+        .header-inner { max-width: 1220px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .brand { font-size: 1.28rem; font-weight: 800; color: var(--cyan); cursor: pointer; }
+        .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
         .tab-btn {
-            background: transparent;
-            color: var(--text-muted);
-            border: 1px solid transparent;
-            padding: 8px 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            background: transparent; color: var(--text-muted); border: 1px solid transparent;
+            padding: 7px 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.86rem; transition: all 0.2s;
         }
         .tab-btn:hover { color: #fff; background: rgba(255,255,255,0.05); }
         .tab-btn.active { background: rgba(56, 189, 248, 0.15); color: var(--cyan); border-color: rgba(56, 189, 248, 0.4); }
 
-        .container { max-width: 1180px; margin: 0 auto; padding: 24px 20px; }
+        .container { max-width: 1220px; margin: 0 auto; padding: 24px 20px; }
         .tab-content { display: none; animation: fadeIn 0.35s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 22px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 8px 25px rgba(0,0,0,0.35); }
-        .card h2 { font-size: 1.2rem; margin-bottom: 14px; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
+        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 20px; margin-bottom: 22px; }
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 22px; box-shadow: 0 8px 25px rgba(0,0,0,0.35); }
+        .card h2 { font-size: 1.16rem; margin-bottom: 12px; color: #f8fafc; display: flex; align-items: center; gap: 8px; }
 
-        /* Inputs & Controls */
+        /* Inputs & Buttons */
         input[type="text"], textarea, select {
             width: 100%; background: #09101d; border: 1px solid #1e293b; color: #fff;
-            padding: 12px; border-radius: 10px; font-size: 0.95rem; margin-bottom: 12px;
+            padding: 11px; border-radius: 10px; font-size: 0.94rem; margin-bottom: 12px;
         }
         input:focus, textarea:focus, select:focus { outline: none; border-color: var(--cyan); }
         .action-btn {
             background: linear-gradient(135deg, #0284c7, #4f46e5); color: #fff; border: none;
-            padding: 10px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.92rem;
+            padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem;
         }
         .action-btn:hover { opacity: 0.92; }
+        .danger-btn { background: linear-gradient(135deg, #e11d48, #be123c); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
         .sample-btn { background: rgba(255,255,255,0.06); color: var(--text-muted); border: 1px solid #334155; padding: 6px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; margin-right: 6px; margin-bottom: 8px; }
         .sample-btn:hover { color: #fff; border-color: var(--cyan); }
 
-        /* Result Box */
-        .result-box { background: #070d19; border-left: 4px solid var(--cyan); padding: 16px; border-radius: 10px; margin-top: 14px; font-size: 0.94rem; }
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 8px; }
+        .result-box { background: #070d19; border-left: 4px solid var(--cyan); padding: 15px; border-radius: 10px; margin-top: 12px; font-size: 0.92rem; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
         .b-safe { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid var(--safe); }
         .b-warn { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid var(--warn); }
         .b-danger { background: rgba(244, 63, 94, 0.18); color: #fb7185; border: 1px solid var(--danger); }
 
-        /* Wi-Fi Diagram */
-        .diagram-box { background: #070d19; padding: 18px; border-radius: 12px; border: 1px dashed #334155; text-align: center; margin: 14px 0; }
-        .flow-nodes { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 10px; margin: 14px 0; }
-        .node { background: #111827; border: 1px solid #334155; padding: 12px 16px; border-radius: 10px; min-width: 130px; font-size: 0.88rem; }
-        .node.attacker { border-color: var(--danger); background: rgba(244, 63, 94, 0.1); color: #fda4af; }
+        /* Sandbox Phone Mockup (1 + 4) */
+        .phone-sim {
+            background: #0b1324; border: 2px solid #334155; border-radius: 20px; padding: 16px;
+            max-width: 420px; margin: 0 auto; box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+        }
+        .phone-header { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); border-bottom: 1px solid #1e293b; padding-bottom: 8px; margin-bottom: 12px; }
+        .popup-trap { background: #172033; border: 1px solid #475569; border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+        .trap-actions { display: flex; gap: 8px; margin-top: 10px; }
+        .trap-actions button { flex: 1; padding: 8px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 0.84rem; }
+
+        /* Quiz Options */
+        .quiz-q { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed #1e293b; }
+        .quiz-q p { font-weight: 600; font-size: 0.92rem; margin-bottom: 6px; }
+        .quiz-q label { display: block; font-size: 0.88rem; color: var(--text-muted); margin-bottom: 4px; cursor: pointer; }
+
+        /* Floating SOS & AI Chat (3 + 5) */
+        .floating-sos {
+            position: fixed; bottom: 20px; right: 20px; z-index: 999;
+            background: linear-gradient(135deg, #f43f5e, #be123c); color: #fff;
+            border: none; padding: 13px 20px; border-radius: 999px; font-weight: 800; font-size: 0.92rem;
+            box-shadow: 0 8px 25px rgba(244, 63, 94, 0.45); cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+
+        .chat-box { background: #070d19; border: 1px solid #1e293b; border-radius: 12px; height: 250px; overflow-y: auto; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .msg { padding: 9px 13px; border-radius: 10px; max-width: 85%; font-size: 0.9rem; }
+        .msg-ai { background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.3); align-self: flex-start; color: #e2e8f0; }
+        .msg-user { background: #2563eb; align-self: flex-end; color: #fff; }
 
         /* Table */
-        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.9rem; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #1e293b; }
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 0.88rem; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #1e293b; }
         th { background: #09101d; color: var(--cyan); }
-
-        footer { text-align: center; padding: 28px 20px; color: var(--text-muted); font-size: 0.86rem; border-top: 1px solid var(--border); margin-top: 36px; }
+        footer { text-align: center; padding: 26px 20px; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 30px; }
     </style>
 </head>
 <body>
@@ -153,16 +157,15 @@
 <!-- ==================== MÀN HÌNH CHÀO ĐÓN ==================== -->
 <section id="welcomeScreen">
     <div class="pill">🛡️ Đồ án Nhập môn ngành & Kỹ năng mềm – Khoa KTMT&ĐT (VKU)</div>
-    <h1>CyberGuard AI</h1>
+    <h1>CyberGuard AI 2.0</h1>
     <p>
-        Hệ thống AI Giám sát Rủi ro An toàn Thông tin Cá nhân & Phòng vệ Mạng Công cộng — Giúp người dùng phát hiện sớm liên kết giả mạo, đánh giá an toàn Wi-Fi miễn phí và ngăn chặn tấn công đánh cắp dữ liệu từ cửa ngõ.
+        Nền tảng Phòng thủ Chủ động, Huấn luyện Nhận diện Bẫy Tấn công Mạng & Trợ lý AI Ứng cứu Sự cố 60 Giây dành cho Người dùng Trẻ.
     </p>
     <button class="btn-primary" onclick="startSystem()">🚀 Khởi chạy Hệ thống Phòng vệ</button>
     <div class="feature-pills">
-        <span>📡 Kiểm tra Wi-Fi Công cộng & MitM</span>
-        <span>🔗 Quét Link Phishing & Tin nhắn lừa đảo</span>
-        <span>🔐 Đo độ mạnh Mật khẩu & Giờ tấn công</span>
-        <span>📊 Phân tích Bức tranh An ninh mạng VN</span>
+        <span>🎮 Sandbox Mô phỏng Bẫy & Chứng nhận Radar (1+4)</span>
+        <span>🚨 Ứng cứu 60s & Chatbot AI Bảo mật (3+5)</span>
+        <span>📡 Kiểm tra Wi-Fi Công cộng & Quét Phishing</span>
     </div>
 </section>
 
@@ -170,128 +173,204 @@
 <div id="mainApp">
     <header>
         <div class="header-inner">
-            <div class="brand" onclick="goWelcome()">🛡️ CyberGuard AI</div>
+            <div class="brand" onclick="goWelcome()">🛡️ CyberGuard AI 2.0</div>
             <div class="tabs">
-                <button class="tab-btn active" onclick="switchTab('wifiTab', this)">1. An toàn Wi-Fi Công cộng</button>
-                <button class="tab-btn" onclick="switchTab('phishingTab', this)">2. Quét Link & Lừa đảo AI</button>
-                <button class="tab-btn" onclick="switchTab('passwordTab', this)">3. Mật khẩu & Khung giờ Tấn công</button>
-                <button class="tab-btn" onclick="switchTab('intelTab', this)">4. Tổng quan & Kiến trúc Hệ thống</button>
+                <button class="tab-btn active" onclick="switchTab('sandboxQuizTab', this)">1. Sandbox Bẫy & Radar Kỹ Năng</button>
+                <button class="tab-btn" onclick="switchTab('sosAiTab', this)">2. Ứng Cứu 60s & Chatbot AI</button>
+                <button class="tab-btn" onclick="switchTab('wifiPhishTab', this)">3. Quét Wi-Fi & Link Lừa Đảo</button>
+                <button class="tab-btn" onclick="switchTab('pwdClockTab', this)">4. Mật Khẩu & Giờ Tấn Công</button>
+                <button class="tab-btn" onclick="switchTab('intelTab', this)">5. Kiến Trúc & Thực Tiễn VN</button>
             </div>
         </div>
     </header>
 
     <div class="container">
 
-        <!-- TAB 1: AN TOÀN WI-FI CÔNG CỘNG -->
-        <div id="wifiTab" class="tab-content active">
+        <!-- TAB 1: KẾT HỢP (1 + 4) SANDBOX MÔ PHỎNG TẤN CÔNG & CHỨNG NHẬN RADAR -->
+        <div id="sandboxQuizTab" class="tab-content active">
             <div class="grid-2">
+                <!-- Cột 1: Sandbox mô phỏng bẫy thực tế -->
                 <div class="card">
-                    <h2>📡 Đánh Giá Môi Trường Wi-Fi Đang Kết Nối</h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 14px;">
-                        Kiểm tra nhanh mức độ rủi ro nghe lén (Man-in-the-Middle) và trạm phát giả mạo (Evil Twin) khi dùng Wi-Fi tại quán cà phê, sân bay, nơi công cộng.
-                    </p>
-                    <label style="font-size: 0.88rem; color: var(--text-muted);">Địa điểm kết nối hiện tại:</label>
-                    <select id="wifiLocation">
-                        <option value="home">Mạng gia đình / 4G-5G cá nhân (Có mật khẩu WPA2/WPA3)</option>
-                        <option value="cafe_pass">Wi-Fi quán cà phê / trường học (Có mật khẩu chung)</option>
-                        <option value="public_open">Wi-Fi miễn phí không mật khẩu (Sân bay, trung tâm thương mại)</option>
-                        <option value="captive">Wi-Fi yêu cầu đăng nhập Facebook/Google/SĐT để dùng mạng</option>
-                    </select>
-
-                    <label style="font-size: 0.88rem; color: var(--text-muted);">Bạn có đang bật VPN mã hóa đường truyền không?</label>
-                    <select id="vpnStatus">
-                        <option value="no">Không bật VPN (Dữ liệu đi trực tiếp qua Router)</option>
-                        <option value="yes">Có bật VPN (Đường truyền được mã hóa đầu cuối)</option>
-                    </select>
-
-                    <button class="action-btn" onclick="analyzeWifi()">🔍 Phân tích rủi ro kết nối</button>
-
-                    <div class="result-box" id="wifiResult">
-                        <span class="badge b-safe">Trạng thái trình duyệt hiện tại</span><br>
-                        Giao thức kết nối trang web này: <strong id="protocolStatus">Đang kiểm tra...</strong><br>
-                        Hãy chọn kịch bản Wi-Fi phía trên và bấm <b>Phân tích rủi ro kết nối</b> để xem khuyến nghị từ AI.
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h2>⚠️ Mô Phỏng Tấn Công Wi-Fi Giả Mạo (Evil Twin)</h2>
-                    <p style="font-size: 0.9rem; color: var(--text-muted);">
-                        Kẻ tấn công tạo trạm phát trùng tên quán cà phê với tín hiệu mạnh hơn để đứng giữa đánh cắp mật khẩu và Cookie phiên đăng nhập.
-                    </p>
-                    <div class="diagram-box" id="mitmDiagram">
-                        <div style="font-weight: bold; color: var(--cyan); margin-bottom: 8px;">Luồng dữ liệu khi dùng Wi-Fi công cộng không bảo vệ</div>
-                        <div class="flow-nodes">
-                            <div class="node">📱 Thiết bị của bạn<br><small>(Gửi mật khẩu / OTP)</small></div>
-                            <span style="font-size: 1.4rem;">➡️</span>
-                            <div class="node attacker">☠️ Trạm Wi-Fi Giả<br><small>(Nghe lén & Đọc gói tin)</small></div>
-                            <span style="font-size: 1.4rem;">➡️</span>
-                            <div class="node">🌐 Internet / Ngân hàng<br><small>(Tài khoản bị chiếm quyền)</small></div>
-                        </div>
-                        <button class="sample-btn" onclick="toggleMitmDefense()">🛡️ Xem cơ chế khi bật HTTPS + VPN</button>
-                    </div>
-                    <div style="font-size: 0.88rem; color: #cbd5e1;">
-                        <strong>Nguyên tắc vàng khi dùng Wi-Fi miễn phí:</strong>
-                        <ul style="margin-left: 18px; margin-top: 6px;">
-                            <li>Tuyệt đối không đăng nhập ngân hàng hoặc nhập mã OTP trên mạng mở.</li>
-                            <li>Tắt tính năng <i>"Tự động kết nối Wi-Fi"</i> trên điện thoại/laptop.</li>
-                            <li>Luôn kiểm tra biểu tượng ổ khóa <b>HTTPS</b> trên thanh địa chỉ trình duyệt.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: QUÉT LINK PHISHING & TIN NHẮN LỪA ĐẢO -->
-        <div id="phishingTab" class="tab-content">
-            <div class="card">
-                <h2>🔗 Bộ Lọc AI Phát Hiện Link Độc Hại & Kịch Bản Lừa Đảo (Phishing / Smishing)</h2>
-                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 12px;">
-                    Dán đường link lạ hoặc nội dung tin nhắn nhận được qua Zalo, SMS, Email để hệ thống phân tích dấu hiệu giả mạo trước khi bạn bấm vào:
-                </p>
-                <div style="margin-bottom: 8px;">
-                    <span style="font-size: 0.84rem; color: var(--text-muted);">Dùng thử mẫu thực tế:</span>
-                    <button class="sample-btn" onclick="loadSample(1)">Mẫu 1: Giả mạo Ngân hàng khóa tài khoản</button>
-                    <button class="sample-btn" onclick="loadSample(2)">Mẫu 2: Giả mạo Dịch vụ công / VNeID (.apk)</button>
-                    <button class="sample-btn" onclick="loadSample(3)">Mẫu 3: Link chính thống an toàn</button>
-                </div>
-                <textarea id="phishingInput" rows="4" placeholder="Ví dụ: Tai khoan VCB cua ban bi tam khoa, vui long xac thuc tai http://vietcombank-xacthuc24h.xyz trong 2 gio..."></textarea>
-                <button class="action-btn" onclick="scanPhishing()">🛡️ Quét & Phân tích rủi ro</button>
-
-                <div class="result-box" id="phishingResult">
-                    Hệ thống sẵn sàng quét. Hãy nhập đường link hoặc đoạn tin nhắn cần kiểm tra ở khung trên.
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: KIỂM TRA MẬT KHẨU & KHUNG GIỜ TẤN CÔNG -->
-        <div id="passwordTab" class="tab-content">
-            <div class="grid-2">
-                <div class="card">
-                    <h2>🔐 Kiểm Tra Độ Mạnh Mật Khẩu (Chống Brute-Force)</h2>
+                    <h2>🎮 Phòng Tập Bẫy Tấn Công Thời Gian Thực (Sandbox)</h2>
                     <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
-                        <i>Cam kết bảo mật: Mật khẩu được tính toán trực tiếp trên trình duyệt của bạn, tuyệt đối không lưu trữ hay gửi đi đâu.</i>
+                        Thử phản xạ của bạn trước các tình huống lừa đảo phổ biến trên điện thoại. Bấm chọn hành động để xem hệ thống mô phỏng hậu quả hoặc cách phòng thủ:
                     </p>
-                    <input type="text" id="pwdInput" placeholder="Nhập thử một cấu trúc mật khẩu để đo thời gian bẻ khóa..." oninput="checkPassword()">
-                    <div class="result-box" id="pwdResult">
-                        Nhập mật khẩu để xem chỉ số Entropy (độ hỗn loạn) và thời gian ước tính tin tặc dùng siêu máy tính bẻ khóa.
+                    <div style="margin-bottom: 10px; text-align: center;">
+                        <button class="sample-btn" onclick="setTrap(1)">Bẫy 1: File VNeID.apk</button>
+                        <button class="sample-btn" onclick="setTrap(2)">Bẫy 2: Wi-Fi Quán Cà Phê</button>
+                        <button class="sample-btn" onclick="setTrap(3)">Bẫy 3: Cảnh báo Ngân hàng</button>
                     </div>
+
+                    <div class="phone-sim">
+                        <div class="phone-header">
+                            <span>📶 5G | Wi-Fi</span>
+                            <span>🔒 Mô phỏng thiết bị mục tiêu</span>
+                            <span>🔋 88%</span>
+                        </div>
+                        <div class="popup-trap" id="trapContent">
+                            <strong style="color: var(--warn);">📲 Tin nhắn từ: CANH_SAT_KV</strong>
+                            <p style="font-size: 0.88rem; margin-top: 6px;">
+                                "Thông báo cập nhật định danh mức 2 bắt buộc trước 22h hôm nay. Tải tệp cài đặt <b>DichVuCong_v2.apk</b> để tránh bị khóa tài khoản."
+                            </p>
+                            <div class="trap-actions">
+                                <button style="background: var(--danger); color: #fff;" onclick="triggerTrap(true, 1)">📥 Tải & Cài đặt ngay</button>
+                                <button style="background: var(--safe); color: #fff;" onclick="triggerTrap(false, 1)">🛡️ Xóa & Lên trụ sở Phường</button>
+                            </div>
+                        </div>
+                        <div id="sandboxFeedback" style="font-size: 0.86rem; color: #cbd5e1; background: #070d19; padding: 12px; border-radius: 10px;">
+                            👉 Hãy chọn một nút hành động trên màn hình điện thoại giả lập phía trên.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột 2: Thử thách Tường lửa Con người & Biểu đồ Radar -->
+                <div class="card">
+                    <h2>🏆 Đánh Giá "Tường Lửa Con Người" & Biểu Đồ Radar</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 12px;">
+                        Trả lời 4 tình huống nhanh để hệ thống vẽ biểu đồ năng lực phòng vệ và cấp Chứng nhận An toàn Mạng:
+                    </p>
+
+                    <div class="quiz-q">
+                        <p>1. Trang web ngân hàng thật tại Việt Nam luôn có đặc điểm nào?</p>
+                        <label><input type="radio" name="q1" value="1"> Dùng giao thức HTTPS và tên miền chính thức (.com.vn / .vn)</label>
+                        <label><input type="radio" name="q1" value="0"> Gửi qua tin nhắn SMS kèm đuôi .xyz để xác thực nhanh</label>
+                    </div>
+                    <div class="quiz-q">
+                        <p>2. Khi dùng Wi-Fi miễn phí ở sân bay, hành động nào an toàn nhất?</p>
+                        <label><input type="radio" name="q2" value="1"> Bật VPN và không đăng nhập tài khoản ngân hàng</label>
+                        <label><input type="radio" name="q2" value="0"> Đăng nhập bằng tài khoản Facebook cá nhân để nhận mạng miễn phí</label>
+                    </div>
+                    <div class="quiz-q">
+                        <p>3. Mật khẩu nào chống lại công cụ dò quét Brute-force tốt nhất?</p>
+                        <label><input type="radio" name="q3" value="1"> Cụm từ dài >= 12 ký tự gồm chữ hoa, thường, số, ký tự đặc biệt + 2FA</label>
+                        <label><input type="radio" name="q3" value="0"> Ngày tháng năm sinh kèm số điện thoại cá nhân cho dễ nhớ</label>
+                    </div>
+                    <div class="quiz-q" style="border: none;">
+                        <p>4. Người thân gọi video Messenger vay tiền gấp nhưng hình ảnh hơi giật, bạn nên làm gì?</p>
+                        <label><input type="radio" name="q4" value="1"> Gọi lại qua số điện thoại di động thông thường để xác minh</label>
+                        <label><input type="radio" name="q4" value="0"> Chuyển khoản ngay vì thấy đúng khuôn mặt và giọng nói</label>
+                    </div>
+
+                    <button class="action-btn" onclick="evaluateRadar()">📊 Xuất Biểu Đồ Radar & Chứng Nhận</button>
+
+                    <div id="radarResultArea" style="display: none; margin-top: 14px; background: #070d19; padding: 14px; border-radius: 12px; border: 1px solid var(--cyan);">
+                        <div id="certBadge" style="text-align: center; margin-bottom: 10px;"></div>
+                        <canvas id="skillRadarChart" height="190"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: KẾT HỢP (3 + 5) ỨNG CỨU KHẨN CẤP 60 GIÂY & CHATBOT AI -->
+        <div id="sosAiTab" class="tab-content">
+            <div class="grid-2">
+                <!-- Cột 1: Ứng cứu khẩn cấp 60 giây -->
+                <div class="card" style="border-color: rgba(244, 63, 94, 0.4);">
+                    <h2 style="color: #fb7185;">🚨 Trợ Lý Ứng Cứu Sự Cố Khẩn Cấp 60 Giây</h2>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+                        Nếu bạn hoặc người thân vừa thao tác nhầm, hãy chọn ngay tình huống bên dưới để nhận quy trình cô lập thiệt hại từng phút:
+                    </p>
+                    <select id="sosScenario">
+                        <option value="apk">1. Vừa tải và cài đặt tệp tin .apk lạ trên điện thoại Android</option>
+                        <option value="phish_pass">2. Vừa nhập mật khẩu / mã OTP vào một trang web nghi giả mạo</option>
+                        <option value="deepfake_money">3. Vừa chuyển khoản cho đối tượng lừa đảo / Deepfake</option>
+                        <option value="wifi_hack">4. Nghi ngờ tài khoản Facebook/Gmail bị đăng nhập từ Wi-Fi lạ</option>
+                    </select>
+                    <button class="danger-btn" onclick="runEmergencyWizard()">⚡ Kích hoạt Quy trình Ứng cứu Ngay</button>
+
+                    <div class="result-box" id="sosStepsBox" style="border-left-color: var(--danger);">
+                        Chọn tình huống sự cố phía trên để hiển thị danh sách hành động khẩn cấp (0–60 giây đầu tiên).
+                    </div>
+                </div>
+
+                <!-- Cột 2: Chatbot Trợ lý Chuyên gia An ninh mạng AI -->
+                <div class="card">
+                    <h2>🤖 Chatbot Chuyên Gia Tư Vấn Bảo Mật AI</h2>
+                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 10px;">
+                        Hỏi đáp nhanh về cách bảo vệ tài khoản, nhận biết mã độc hoặc xử lý rủi ro mạng:
+                    </p>
+                    <div style="margin-bottom: 8px;">
+                        <button class="sample-btn" onclick="askQuick('Cách bật bảo mật 2 lớp (2FA)?')">Cách bật 2FA?</button>
+                        <button class="sample-btn" onclick="askQuick('Dấu hiệu điện thoại bị cài mã độc?')">Dấu hiệu dính mã độc?</button>
+                        <button class="sample-btn" onclick="askQuick('Làm sao tránh bị đánh cắp Cookie?')">Tránh mất Cookie?</button>
+                    </div>
+                    <div class="chat-box" id="aiChatBox">
+                        <div class="msg msg-ai">
+                            Xin chào! Tôi là <strong>CyberGuard AI Advisor</strong>. Bạn đang cần kiểm tra dấu hiệu mất an toàn thông tin hay hướng dẫn bảo mật tài khoản nào?
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="chatInput" style="margin-bottom: 0;" placeholder="Nhập câu hỏi bảo mật của bạn..." onkeypress="if(event.key==='Enter') sendChat()">
+                        <button class="action-btn" onclick="sendChat()">Gửi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: QUÉT WI-FI & LINK PHISHING -->
+        <div id="wifiPhishTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <h2>📡 Kiểm Tra An Toàn Mạng Wi-Fi Công Cộng</h2>
+                    <label style="font-size: 0.88rem; color: var(--text-muted);">Môi trường mạng đang kết nối:</label>
+                    <select id="wifiLocation">
+                        <option value="home">Mạng gia đình / 4G-5G cá nhân (WPA2/WPA3)</option>
+                        <option value="cafe_pass">Wi-Fi quán cà phê / trường học (Dùng chung mật khẩu)</option>
+                        <option value="public_open">Wi-Fi miễn phí không mật khẩu (Sân bay, TTTM)</option>
+                        <option value="captive">Wi-Fi yêu cầu đăng nhập Facebook/Google để dùng mạng</option>
+                    </select>
+                    <label style="font-size: 0.88rem; color: var(--text-muted);">Trạng thái VPN:</label>
+                    <select id="vpnStatus">
+                        <option value="no">Chưa bật VPN</option>
+                        <option value="yes">Đang bật VPN mã hóa</option>
+                    </select>
+                    <button class="action-btn" onclick="analyzeWifi()">🔍 Đánh giá kết nối</button>
+                    <div class="result-box" id="wifiResult">
+                        Giao thức trang web hiện tại: <strong id="protocolStatus">Đang kiểm tra...</strong>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>🔗 Bộ Lọc AI Quét Link & Tin Nhắn Lừa Đảo</h2>
+                    <div style="margin-bottom: 8px;">
+                        <button class="sample-btn" onclick="loadSample(1)">Mẫu Ngân hàng</button>
+                        <button class="sample-btn" onclick="loadSample(2)">Mẫu File .apk</button>
+                        <button class="sample-btn" onclick="loadSample(3)">Mẫu Link sạch</button>
+                    </div>
+                    <textarea id="phishingInput" rows="3" placeholder="Dán đường link hoặc nội dung tin nhắn nghi ngờ vào đây..."></textarea>
+                    <button class="action-btn" onclick="scanPhishing()">🛡️ Quét rủi ro</button>
+                    <div class="result-box" id="phishingResult">Sẵn sàng phân tích đường dẫn và kịch bản thao túng tâm lý.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: MẬT KHẨU & KHUNG GIỜ TẤN CÔNG -->
+        <div id="pwdClockTab" class="tab-content">
+            <div class="grid-2">
+                <div class="card">
+                    <h2>🔐 Đo Độ Mạnh Mật Khẩu (Chống Brute-Force)</h2>
+                    <p style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 10px;">
+                        Xử lý hoàn toàn cục bộ trên trình duyệt — không gửi dữ liệu ra ngoài.
+                    </p>
+                    <input type="text" id="pwdInput" placeholder="Nhập thử cấu trúc mật khẩu..." oninput="checkPassword()">
+                    <div class="result-box" id="pwdResult">Nhập mật khẩu để đo chỉ số Entropy và thời gian bẻ khóa ước tính.</div>
                 </div>
 
                 <div class="card">
                     <h2>⏱️ Đồng Hồ Cảnh Báo Khung Giờ Tấn Công Mạng</h2>
-                    <div style="background: #070d19; padding: 18px; border-radius: 12px; text-align: center; margin-bottom: 14px;">
-                        <div id="cyberClock" style="font-size: 2.6rem; font-weight: 800; color: var(--cyan);">00:00:00</div>
-                        <div id="threatWindowBadge" class="badge b-warn" style="margin-top: 8px;">Đang phân tích khung giờ...</div>
+                    <div style="background: #070d19; padding: 16px; border-radius: 12px; text-align: center; margin-bottom: 12px;">
+                        <div id="cyberClock" style="font-size: 2.5rem; font-weight: 800; color: var(--cyan);">00:00:00</div>
+                        <div id="threatWindowBadge" class="badge b-warn" style="margin-top: 6px;">Đang phân tích...</div>
                     </div>
-                    <p id="threatWindowDesc" style="font-size: 0.92rem; color: #cbd5e1;"></p>
+                    <p id="threatWindowDesc" style="font-size: 0.9rem; color: #cbd5e1;"></p>
                 </div>
             </div>
         </div>
 
-        <!-- TAB 4: TỔNG QUAN TẤN CÔNG MẠNG VN & KIẾN TRÚC HỆ THỐNG -->
+        <!-- TAB 5: KIẾN TRÚC & THỰC TIỄN VIỆT NAM -->
         <div id="intelTab" class="tab-content">
-            <div class="card" style="margin-bottom: 22px;">
-                <h2>📊 Tổng Hợp Các Hình Thức Tấn Công Mạng Phổ Biến Tại Việt Nam</h2>
+            <div class="card" style="margin-bottom: 20px;">
+                <h2>📊 Bức Tranh Tấn Công Mạng Phổ Biến Tại Việt Nam</h2>
                 <div style="overflow-x: auto;">
                     <table>
                         <thead>
@@ -312,26 +391,20 @@
                             <tr>
                                 <td><strong>Infostealer (Mã độc đánh cắp)</strong></td>
                                 <td>Phần mềm crack, game lậu, file đính kèm độc hại</td>
-                                <td>Mật khẩu lưu trên trình duyệt, Session Cookies</td>
-                                <td>Chạy ngầm 24/7 sau khi cài file</td>
+                                <td>Mật khẩu lưu trình duyệt, Session Cookies</td>
+                                <td>Chạy ngầm 24/7</td>
                             </tr>
                             <tr>
                                 <td><strong>Evil Twin / MitM Wi-Fi</strong></td>
                                 <td>Wi-Fi miễn phí không mật khẩu, Captive Portal giả</td>
-                                <td>Thông tin đăng nhập mạng xã hội, gói tin chưa mã hóa</td>
-                                <td>Giờ cao điểm tại quán cà phê/sân bay</td>
+                                <td>Tài khoản mạng xã hội, gói tin chưa mã hóa</td>
+                                <td>Giờ cao điểm quán cà phê/sân bay</td>
                             </tr>
                             <tr>
                                 <td><strong>Ransomware & Brute-force</strong></td>
-                                <td>Lỗ hổng máy chủ, RDP mật khẩu yếu, rò rỉ dữ liệu cũ</td>
-                                <td>Cơ sở dữ liệu doanh nghiệp, hồ sơ khách hàng</td>
+                                <td>Lỗ hổng máy chủ, RDP mật khẩu yếu</td>
+                                <td>Cơ sở dữ liệu nội bộ, hồ sơ khách hàng</td>
                                 <td>00h00–04h00 sáng & cuối tuần</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Deepfake Fraud (Giả danh AI)</strong></td>
-                                <td>Cuộc gọi video Messenger, Zalo giả người thân/sếp</td>
-                                <td>Tiền chuyển khoản & xác thực khuôn mặt</td>
-                                <td>Buổi trưa & tối muộn dễ mất cảnh giác</td>
                             </tr>
                         </tbody>
                     </table>
@@ -340,25 +413,22 @@
 
             <div class="card">
                 <h2>🏗️ Kiến Trúc Hệ Thống Phòng Thủ Chủ Động (CyberGuard AI)</h2>
-                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 14px;">
-                    <i>Định vị kỹ thuật: Hệ thống đóng vai trò "lá chắn giám sát từ tầng người dùng", phát hiện sớm dấu hiệu xâm nhập trước khi kẻ tấn công chiếm quyền điều khiển thiết bị mục tiêu.</i>
-                </p>
                 <div class="grid-2">
-                    <div style="background: #09101d; padding: 16px; border-radius: 10px; border-left: 3px solid var(--cyan);">
-                        <strong>1. Tầng Kiểm tra Môi trường & Kết nối (Network Guard)</strong>
-                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Đánh giá rủi ro Wi-Fi công cộng, kiểm tra giao thức HTTPS và cảnh báo nguy cơ tấn công xen giữa (MitM).</p>
+                    <div style="background: #09101d; padding: 14px; border-radius: 10px; border-left: 3px solid var(--cyan);">
+                        <strong>1. Tầng Huấn luyện & Đánh giá (Sandbox + Radar)</strong>
+                        <p style="font-size: 0.86rem; color: var(--text-muted);">Mô phỏng tình huống tấn công thực tế và định lượng 4 nhóm kỹ năng an toàn thông tin của người dùng.</p>
                     </div>
-                    <div style="background: #09101d; padding: 16px; border-radius: 10px; border-left: 3px solid var(--indigo);">
-                        <strong>2. Tầng Phân tích Ngữ nghĩa & URL (AI Anti-Phishing)</strong>
-                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Bóc tách tên miền giả mạo, phát hiện file cài đặt độc hại (.apk/.exe) và kịch bản thao túng tâm lý.</p>
+                    <div style="background: #09101d; padding: 14px; border-radius: 10px; border-left: 3px solid var(--danger);">
+                        <strong>2. Tầng Ứng cứu & Tư vấn AI (SOS 60s + Chatbot)</strong>
+                        <p style="font-size: 0.86rem; color: var(--text-muted);">Cung cấp kịch bản cô lập sự cố theo từng phút và trợ lý hỏi đáp bảo mật tức thì.</p>
                     </div>
-                    <div style="background: #09101d; padding: 16px; border-radius: 10px; border-left: 3px solid var(--warn);">
-                        <strong>3. Tầng Đánh giá Xác thực & Thời gian (Auth & Threat Clock)</strong>
-                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Tính toán độ an toàn mật khẩu chống Brute-force và cảnh báo theo khung giờ tin tặc hoạt động mạnh.</p>
+                    <div style="background: #09101d; padding: 14px; border-radius: 10px; border-left: 3px solid var(--indigo);">
+                        <strong>3. Tầng Giám sát Kết nối & Liên kết (Wi-Fi & Phishing)</strong>
+                        <p style="font-size: 0.86rem; color: var(--text-muted);">Kiểm tra giao thức HTTPS, rủi ro mạng công cộng và phân tích cấu trúc URL/tin nhắn độc hại.</p>
                     </div>
-                    <div style="background: #09101d; padding: 16px; border-radius: 10px; border-left: 3px solid var(--safe);">
-                        <strong>4. Hướng Mở Rộng Phần Cứng Nhúng (IoT Security)</strong>
-                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Kết hợp vi điều khiển ESP32 quét gói tin Deauth/Evil Twin trong mạng Wi-Fi nội bộ và gửi cảnh báo lên Web.</p>
+                    <div style="background: #09101d; padding: 14px; border-radius: 10px; border-left: 3px solid var(--safe);">
+                        <strong>4. Hướng Mở Rộng Phần Cứng Nhúng (ESP32 IoT)</strong>
+                        <p style="font-size: 0.86rem; color: var(--text-muted);">Tích hợp mạch ESP32 giám sát gói tin Deauth/Evil Twin trong mạng Wi-Fi cục bộ và đồng bộ cảnh báo lên Web.</p>
                     </div>
                 </div>
             </div>
@@ -369,14 +439,19 @@
             Khoa Kỹ thuật Máy tính & Điện tử – Trường ĐH CNTT & Truyền thông Việt - Hàn (VKU) | GVHD: TS. Hoàng Hữu Đức
         </footer>
     </div>
+
+    <!-- Nút SOS Khẩn Cấp Nổi Luôn Hiện Ở Góc Màn Hình -->
+    <button class="floating-sos" onclick="jumpToSos()">🚨 KHẨN CẤP: Nghi lộ tài khoản / Bấm nhầm link!</button>
 </div>
 
 <script>
-    // Điều hướng Welcome Screen & Tabs
     function startSystem() {
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
-        checkCurrentProtocol();
+        const isHttps = window.location.protocol === 'https:';
+        document.getElementById('protocolStatus').innerHTML = isHttps
+            ? '<span style="color:#34d399;">HTTPS (Đã mã hóa an toàn)</span>'
+            : '<span style="color:#fbbf24;">Chạy cục bộ / HTTP</span>';
     }
     function goWelcome() {
         document.getElementById('mainApp').style.display = 'none';
@@ -388,159 +463,243 @@
         document.getElementById(tabId).classList.add('active');
         btn.classList.add('active');
     }
-
-    // Tab 1: Kiểm tra Wi-Fi & HTTPS
-    function checkCurrentProtocol() {
-        const isHttps = window.location.protocol === 'https:';
-        const el = document.getElementById('protocolStatus');
-        el.innerHTML = isHttps
-            ? '<span style="color: #34d399;">HTTPS (Đã mã hóa TLS an toàn)</span>'
-            : '<span style="color: #fbbf24;">Chạy cục bộ / HTTP (Cần bật HTTPS khi đưa lên mạng)</span>';
+    function jumpToSos() {
+        const btns = document.querySelectorAll('.tab-btn');
+        switchTab('sosAiTab', btns[1]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // --- TỔ HỢP (1 + 4): SANDBOX & RADAR CHART ---
+    const traps = {
+        1: {
+            title: '📲 Tin nhắn từ: CANH_SAT_KV',
+            body: '"Thông báo cập nhật định danh mức 2 bắt buộc trước 22h hôm nay. Tải tệp cài đặt <b>DichVuCong_v2.apk</b> để tránh bị khóa tài khoản."',
+            badBtn: '📥 Tải & Cài đặt ngay',
+            goodBtn: '🛡️ Xóa & Lên trụ sở Phường'
+        },
+        2: {
+            title: '📡 Wi-Fi: Highlands_Free_VIP_5G',
+            body: 'Trang chào yêu cầu: <i>"Vui lòng đăng nhập tài khoản Facebook hoặc Gmail cá nhân của bạn để nhận 2 giờ truy cập Wi-Fi tốc độ cao miễn phí."</i>',
+            badBtn: '🔑 Nhập tài khoản Facebook',
+            goodBtn: '🚫 Ngắt kết nối & Dùng 4G'
+        },
+        3: {
+            title: '🏦 SMS: VCB-ThongBao',
+            body: '"Tài khoản của quý khách vừa phát sinh giao dịch 18.500.000đ. Nếu không phải bạn thực hiện, bấm vào <b>http://vcb-huygiaodich.xyz</b> để hủy ngay."',
+            badBtn: '🔗 Bấm link hủy giao dịch',
+            goodBtn: '📞 Gọi tổng đài in sau thẻ'
+        }
+    };
+
+    function setTrap(id) {
+        const t = traps[id];
+        document.getElementById('trapContent').innerHTML = `
+            <strong style="color: var(--warn);">${t.title}</strong>
+            <p style="font-size: 0.88rem; margin-top: 6px;">${t.body}</p>
+            <div class="trap-actions">
+                <button style="background: var(--danger); color: #fff;" onclick="triggerTrap(true, ${id})">${t.badBtn}</button>
+                <button style="background: var(--safe); color: #fff;" onclick="triggerTrap(false, ${id})">${t.goodBtn}</button>
+            </div>
+        `;
+        document.getElementById('sandboxFeedback').innerHTML = '👉 Chọn một hành động trên màn hình giả lập để kiểm tra phản xạ.';
+    }
+
+    function triggerTrap(isFail, id) {
+        const fb = document.getElementById('sandboxFeedback');
+        if (isFail) {
+            const failLogs = {
+                1: '🚨 <b>SẬP BẪY MÃ ĐỘC .APK!</b> Tệp cài đặt vừa xin quyền <i>Accessibility (Trợ năng)</i>. Tin tặc đang đọc trộm tin nhắn SMS OTP ngân hàng và điều khiển màn hình từ xa!',
+                2: '🚨 <b>SẬP BẪY EVIL TWIN!</b> Đây là trạm phát Wi-Fi giả mạo. Mật khẩu Facebook của bạn vừa bị gửi thẳng về máy chủ của kẻ tấn công.',
+                3: '🚨 <b>SẬP BẪY PHISHING!</b> Tên miền <code>.xyz</code> là trang giả mạo. Thông tin đăng nhập Internet Banking và mã OTP của bạn vừa bị đánh cắp.'
+            };
+            fb.style.borderLeft = '4px solid var(--danger)';
+            fb.innerHTML = failLogs[id];
+        } else {
+            fb.style.borderLeft = '4px solid var(--safe)';
+            fb.innerHTML = '✅ <b>PHẢN XẠ CHÍNH XÁC!</b> Bạn đã chặn đứng cuộc tấn công ngay từ cửa ngõ nhờ kiểm tra kỹ nguồn gốc, tên miền và không tải tệp lạ.';
+        }
+    }
+
+    let radarInstance = null;
+    function evaluateRadar() {
+        const q1 = parseInt(document.querySelector('input[name="q1"]:checked')?.value || 0);
+        const q2 = parseInt(document.querySelector('input[name="q2"]:checked')?.value || 0);
+        const q3 = parseInt(document.querySelector('input[name="q3"]:checked')?.value || 0);
+        const q4 = parseInt(document.querySelector('input[name="q4"]:checked')?.value || 0);
+
+        const total = q1 + q2 + q3 + q4;
+        document.getElementById('radarResultArea').style.display = 'block';
+        const cert = document.getElementById('certBadge');
+
+        if (total === 4) {
+            cert.innerHTML = `<span class="badge b-safe">🏅 CHỨNG NHẬN: TƯỜNG LỬA CON NGƯỜI XUẤT SẮC (4/4)</span><br><small>Bạn có khả năng nhận diện toàn diện các bẫy tấn công mạng phổ biến.</small>`;
+        } else if (total >= 2) {
+            cert.innerHTML = `<span class="badge b-warn">🛡️ MỨC ĐỘ: CƠ BẢN (${total}/4) – CẦN CỦNG CỐ KỸ NĂNG</span><br><small>Hãy xem các trục điểm thấp trên biểu đồ Radar bên dưới để cải thiện.</small>`;
+        } else {
+            cert.innerHTML = `<span class="badge b-danger">⚠️ CẢNH BÁO RỦI RO CAO (${total}/4)</span><br><small>Bạn rất dễ trở thành mục tiêu của Phishing và Wi-Fi giả mạo.</small>`;
+        }
+
+        const ctx = document.getElementById('skillRadarChart').getContext('2d');
+        if (radarInstance) radarInstance.destroy();
+        radarInstance = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['Nhận diện Phishing', 'An toàn Wi-Fi', 'Mật khẩu & 2FA', 'Chống Deepfake'],
+                datasets: [{
+                    label: 'Chỉ số Phòng vệ Cá nhân (%)',
+                    data: [q1 ? 100 : 25, q2 ? 100 : 25, q3 ? 100 : 25, q4 ? 100 : 25],
+                    backgroundColor: 'rgba(56, 189, 248, 0.25)',
+                    borderColor: '#38bdf8',
+                    pointBackgroundColor: '#34d399'
+                }]
+            },
+            options: {
+                scales: {
+                    r: {
+                        min: 0, max: 100,
+                        ticks: { display: false },
+                        grid: { color: 'rgba(255,255,255,0.12)' },
+                        pointLabels: { color: '#e2e8f0', font: { size: 11 } }
+                    }
+                },
+                plugins: { legend: { labels: { color: '#cbd5e1' } } }
+            }
+        });
+    }
+
+    // --- TỔ HỢP (3 + 5): ỨNG CỨU 60 GIÂY & CHATBOT AI ---
+    function runEmergencyWizard() {
+        const val = document.getElementById('sosScenario').value;
+        const box = document.getElementById('sosStepsBox');
+        const guides = {
+            apk: `<strong>🚨 QUY TRÌNH CÔ LẬP MÃ ĐỘC .APK (LÀM NGAY TRONG 60 GIÂY):</strong>
+                <ol style="margin-left: 18px; margin-top: 6px;">
+                    <li><b>Giây 0–15:</b> Bật ngay <b>Chế độ Máy bay (Airplane Mode)</b> hoặc tắt Wi-Fi/4G để cắt đứt kết nối điều khiển từ xa của tin tặc.</li>
+                    <li><b>Giây 15–30:</b> Vào <i>Cài đặt &rarr; Ứng dụng</i>, tìm ứng dụng lạ vừa cài đặt và bấm <b>Gỡ cài đặt (Uninstall)</b>. Nếu không gỡ được, hãy tắt quyền <i>Trợ năng (Accessibility)</i> trước.</li>
+                    <li><b>Giây 30–60:</b> Dùng một điện thoại sạch khác gọi tổng đài ngân hàng yêu cầu <b>tạm khóa tài khoản/thẻ</b> khẩn cấp.</li>
+                </ol>`,
+            phish_pass: `<strong>🚨 QUY TRÌNH ỨNG CỨU KHI NHẬP NHẦM MẬT KHẨU / OTP:</strong>
+                <ol style="margin-left: 18px; margin-top: 6px;">
+                    <li><b>Giây 0–20:</b> Đổi ngay mật khẩu tài khoản bị lộ trên một thiết bị khác sạch mã độc.</li>
+                    <li><b>Giây 20–40:</b> Vào phần <i>Bảo mật & Đăng nhập</i>, chọn <b>"Đăng xuất khỏi tất cả các thiết bị"</b> để vô hiệu hóa Cookie phiên của kẻ tấn công.</li>
+                    <li><b>Giây 40–60:</b> Bật ngay xác thực 2 lớp (2FA) bằng ứng dụng Authenticator và thông báo cho ngân hàng nếu liên quan tài chính.</li>
+                </ol>`,
+            deepfake_money: `<strong>🚨 QUY TRÌNH XỬ LÝ KHI VỪA CHUYỂN TIỀN LỪA ĐẢO:</strong>
+                <ol style="margin-left: 18px; margin-top: 6px;">
+                    <li><b>Giây 0–30:</b> Gọi ngay đường dây nóng của ngân hàng chuyển tiền và ngân hàng nhận tiền yêu cầu <b>tra soát khẩn cấp / phong tỏa tạm thời</b> giao dịch nghi vấn.</li>
+                    <li><b>Giây 30–60:</b> Chụp màn hình toàn bộ biên lai chuyển khoản, lịch sử cuộc gọi, tin nhắn và trình báo ngay tới Cơ quan Công an gần nhất.</li>
+                </ol>`,
+            wifi_hack: `<strong>🚨 QUY TRÌNH XỬ LÝ KHI NGHI LỘ PHIÊN ĐĂNG NHẬP QUA WI-FI LẠ:</strong>
+                <ol style="margin-left: 18px; margin-top: 6px;">
+                    <li><b>Giây 0–20:</b> Ngắt kết nối Wi-Fi công cộng ngay lập tức, chuyển sang mạng di động 4G/5G cá nhân.</li>
+                    <li><b>Giây 20–45:</b> Thu hồi toàn bộ phiên đăng nhập cũ (Revoke Sessions) trên Facebook, Google, Zalo.</li>
+                    <li><b>Giây 45–60:</b> Đổi mật khẩu mới và kiểm tra lại danh sách thiết bị tin cậy.</li>
+                </ol>`
+        };
+        box.innerHTML = guides[val];
+    }
+
+    function askQuick(q) {
+        document.getElementById('chatInput').value = q;
+        sendChat();
+    }
+
+    function sendChat() {
+        const input = document.getElementById('chatInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        const chatBox = document.getElementById('aiChatBox');
+        chatBox.innerHTML += `<div class="msg msg-user">${text}</div>`;
+        input.value = '';
+
+        const lower = text.toLowerCase();
+        let reply = 'Để đảm bảo an toàn, bạn hãy luôn nguyên tắc <b>"3 Không"</b>: Không bấm link lạ gửi qua SMS/Zalo, Không cài file .apk ngoài kho ứng dụng chính thức, và Không dùng Wi-Fi miễn phí để giao dịch ngân hàng.';
+
+        if (lower.includes('2fa') || lower.includes('2 lớp')) {
+            reply = 'Để bật <b>Bảo mật 2 lớp (2FA)</b>: Bạn vào <i>Cài đặt tài khoản &rarr; Bảo mật &rarr; Xác thực 2 yếu tố</i>. Nên ưu tiên dùng ứng dụng <b>Google Authenticator</b> thay vì nhận mã qua SMS để chống nguy cơ bị đánh cắp tin nhắn.';
+        } else if (lower.includes('mã độc') || lower.includes('theo dõi') || lower.includes('apk')) {
+            reply = 'Dấu hiệu điện thoại nhiễm mã độc: Pin tụt rất nhanh dù không dùng, máy nóng bất thường, xuất hiện ứng dụng không rõ nguồn gốc, hoặc tự động gửi tin nhắn lạ. Hãy ngắt mạng và kiểm tra quyền <i>Trợ năng (Accessibility)</i> ngay.';
+        } else if (lower.includes('cookie')) {
+            reply = '<b>Session Cookie</b> bị đánh cắp chủ yếu do tải phần mềm crack hoặc cài tiện ích (Extension) trình duyệt lạ. Cách phòng tránh: Không dùng phần mềm bẻ khóa, xóa Cookie định kỳ và bật tính năng <i>Duyệt web an toàn nâng cao</i> trên Chrome.';
+        } else if (lower.includes('wifi')) {
+            reply = 'Khi bắt buộc dùng Wi-Fi công cộng, bạn hãy bật <b>VPN</b> để mã hóa toàn bộ gói tin, tắt tính năng tự động kết nối Wi-Fi và chỉ truy cập các trang có ổ khóa <b>HTTPS</b>.';
+        }
+
+        setTimeout(() => {
+            chatBox.innerHTML += `<div class="msg msg-ai">${reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 250);
+    }
+
+    // --- TAB 3 & 4 LOGIC ---
     function analyzeWifi() {
         const loc = document.getElementById('wifiLocation').value;
         const vpn = document.getElementById('vpnStatus').value;
         const box = document.getElementById('wifiResult');
-
-        if (loc === 'home') {
-            box.innerHTML = `<span class="badge b-safe">MỨC ĐỘ AN TOÀN CAO</span><br>Mạng cá nhân có mã hóa WPA2/WPA3 giúp giảm thiểu nguy cơ bị nghe lén nội bộ. Hãy đảm bảo mật khẩu Router không dùng mật khẩu mặc định của nhà sản xuất.`;
-        } else if (vpn === 'yes') {
-            box.innerHTML = `<span class="badge b-safe">ĐÃ ĐƯỢC BẢO VỆ BỞI VPN</span><br>Dù bạn đang dùng mạng công cộng, đường hầm mã hóa VPN đã ngăn chặn kẻ tấn công đọc trộm dữ liệu (MitM). Tuy nhiên vẫn cần cảnh giác với các trang đăng nhập giả mạo (Phishing).`;
-        } else if (loc === 'captive') {
-            box.innerHTML = `<span class="badge b-danger">CẢNH BÁO ĐỎ: NGUY CƠ EVIL TWIN & ĐÁNH CẮP TÀI KHOẢN</span><br>Nhiều trạm Wi-Fi giả mạo dùng trang chào (Captive Portal) yêu cầu đăng nhập Facebook/Google để đánh cắp mật khẩu. <strong>Khuyến nghị:</strong> Không nhập tài khoản thật, hãy chuyển sang dùng 4G/5G hoặc bật VPN ngay.`;
-        } else {
-            box.innerHTML = `<span class="badge b-warn">RỦI RO TRUNG BÌNH – CAO (NGUY CƠ NGHE LÉN MITM)</span><br>Trên mạng Wi-Fi dùng chung không có VPN, kẻ xấu cùng mạng có thể dùng công cụ phân tích gói tin hoặc giả mạo ARP để theo dõi lưu lượng truy cập. <strong>Khuyến nghị:</strong> Tuyệt đối không giao dịch ngân hàng và bật VPN nếu cần làm việc.`;
-        }
+        if (loc === 'home') box.innerHTML = `<span class="badge b-safe">AN TOÀN CAO</span><br>Mạng cá nhân có mã hóa WPA2/WPA3. Nên đổi mật khẩu quản trị Router định kỳ.`;
+        else if (vpn === 'yes') box.innerHTML = `<span class="badge b-safe">ĐÃ BẢO VỆ BỞI VPN</span><br>Đường truyền đã được mã hóa chống nghe lén MitM trên mạng công cộng.`;
+        else if (loc === 'captive') box.innerHTML = `<span class="badge b-danger">NGUY CƠ EVIL TWIN RẤT CAO</span><br>Không nhập mật khẩu mạng xã hội thật vào trang chào Wi-Fi miễn phí!`;
+        else box.innerHTML = `<span class="badge b-warn">RỦI RO NGHE LÉN MITM</span><br>Không giao dịch ngân hàng trên Wi-Fi dùng chung khi chưa bật VPN.`;
     }
 
-    let mitmSafeMode = false;
-    function toggleMitmDefense() {
-        mitmSafeMode = !mitmSafeMode;
-        const box = document.getElementById('mitmDiagram');
-        if (mitmSafeMode) {
-            box.innerHTML = `
-                <div style="font-weight: bold; color: var(--safe); margin-bottom: 8px;">Luồng dữ liệu khi bật VPN + HTTPS (Đã mã hóa đầu cuối)</div>
-                <div class="flow-nodes">
-                    <div class="node" style="border-color: var(--safe);">📱 Thiết bị của bạn<br><small>(Mã hóa AES-256)</small></div>
-                    <span style="font-size: 1.4rem;">🔒➡️</span>
-                    <div class="node">📡 Mạng Wi-Fi công cộng<br><small>(Chỉ thấy chuỗi ký tự vô nghĩa)</small></div>
-                    <span style="font-size: 1.4rem;">🔒➡️</span>
-                    <div class="node" style="border-color: var(--safe);">🌐 Máy chủ đích<br><small>(An toàn tuyệt đối)</small></div>
-                </div>
-                <button class="sample-btn" onclick="toggleMitmDefense()">⚠️ Quay lại mô phỏng khi bị tấn công</button>
-            `;
-        } else {
-            box.innerHTML = `
-                <div style="font-weight: bold; color: var(--cyan); margin-bottom: 8px;">Luồng dữ liệu khi dùng Wi-Fi công cộng không bảo vệ</div>
-                <div class="flow-nodes">
-                    <div class="node">📱 Thiết bị của bạn<br><small>(Gửi mật khẩu / OTP)</small></div>
-                    <span style="font-size: 1.4rem;">➡️</span>
-                    <div class="node attacker">☠️ Trạm Wi-Fi Giả<br><small>(Nghe lén & Đọc gói tin)</small></div>
-                    <span style="font-size: 1.4rem;">➡️</span>
-                    <div class="node">🌐 Internet / Ngân hàng<br><small>(Tài khoản bị chiếm quyền)</small></div>
-                </div>
-                <button class="sample-btn" onclick="toggleMitmDefense()">🛡️ Xem cơ chế khi bật HTTPS + VPN</button>
-            `;
-        }
-    }
-
-    // Tab 2: Quét Phishing
     function loadSample(id) {
         const input = document.getElementById('phishingInput');
-        if (id === 1) input.value = "Thong bao khan: Tai khoan ngan hang cua quy khach phat hien giao dich bat thuong. Vui long truy cap http://vcb-xacthuc-baomat24h.xyz trong 30 phut de tranh bi khoa vinh vien.";
-        if (id === 2) input.value = "Can bo Cong an phuong huong dan cap nhat dinh danh muc 2 VNeID qua duong dan: https://dichvucong-capnhat.top/VNeID_Update.apk";
-        if (id === 3) input.value = "Sinh vien truy cap cong dao tao chinh thuc cua truong tai https://daotao.vku.udn.vn de xem lich thi hoc ky 1.";
+        if (id === 1) input.value = "Tai khoan VCB bi khoa, xac thuc ngay tai http://vcb-baomat24h.xyz trong 30 phut.";
+        if (id === 2) input.value = "Cap nhat VNeID muc 2 qua link https://dichvucong.top/VNeID.apk";
+        if (id === 3) input.value = "Xem lich thi chinh thuc tai https://daotao.vku.udn.vn";
     }
 
     function scanPhishing() {
         const text = document.getElementById('phishingInput').value.trim();
         const box = document.getElementById('phishingResult');
-        if (!text) {
-            box.innerHTML = "Vui lòng nhập nội dung tin nhắn hoặc đường link để hệ thống phân tích.";
-            return;
-        }
-
-        let score = 0;
-        let reasons = [];
+        if (!text) return;
+        let score = 0, reasons = [];
         const lower = text.toLowerCase();
+        if (lower.includes('http://')) { score += 35; reasons.push("Dùng giao thức <b>http://</b> không mã hóa."); }
+        if (lower.includes('.apk') || lower.includes('.exe')) { score += 50; reasons.push("Chứa tệp cài đặt <b>.apk/.exe</b> nguy cơ cài mã độc chiếm quyền."); }
+        if (/\.(xyz|top|club|info|vip|tk)\b/.test(lower)) { score += 35; reasons.push("Tên miền đuôi lạ (<i>.xyz, .top...</i>), giả mạo tổ chức uy tín."); }
+        if (lower.includes('khóa') || lower.includes('khoa') || lower.includes('xác thực') || lower.includes('xac thuc')) { score += 25; reasons.push("Ngôn từ thúc ép, gây hoang mang (Social Engineering)."); }
+        if (lower.includes('.edu.vn') || lower.includes('.gov.vn')) score = Math.max(0, score - 40);
 
-        if (lower.includes('http://')) { score += 35; reasons.push("Sử dụng giao thức <b>http://</b> không được mã hóa bảo mật."); }
-        if (lower.includes('.apk') || lower.includes('.exe') || lower.includes('.scr')) { score += 50; reasons.push("Chứa tệp cài đặt trực tiếp (<b>.apk / .exe</b>) — thủ đoạn phổ biến để cài mã độc chiếm quyền điều khiển điện thoại."); }
-        if (/\.(xyz|top|club|info|vip|cc|tk)\b/.test(lower)) { score += 35; reasons.push("Tên miền sử dụng đuôi giá rẻ/lạ (<i>.xyz, .top...</i>), không phải tên miền chính thức của ngân hàng hay cơ quan nhà nước (.gov.vn / .vn)."); }
-        if (lower.includes('khóa') || lower.includes('khoa') || lower.includes('khẩn') || lower.includes('khan') || lower.includes('xác thực') || lower.includes('xac thuc') || lower.includes('trúng thưởng')) {
-            score += 25; reasons.push("Sử dụng ngôn từ gây tâm lý hoang mang, thúc ép hành động gấp (Social Engineering).");
-        }
-        if (lower.includes('.gov.vn') || lower.includes('.edu.vn')) { score = Math.max(0, score - 40); }
-
-        if (score >= 50) {
-            box.innerHTML = `<span class="badge b-danger">🚨 NGUY HIỂM CAO: DẤU HIỆU LỪA ĐẢO (PHISHING / MÃ ĐỘC)</span><br>
-                <strong>Phân tích AI:</strong> Tuyệt đối KHÔNG bấm vào liên kết hoặc tải tệp tin này.<br>
-                <ul style="margin-left: 18px; margin-top: 6px;">${reasons.map(r => `<li>${r}</li>`).join('')}</ul>`;
-        } else if (score >= 25) {
-            box.innerHTML = `<span class="badge b-warn">⚠️ ĐÁNG NGỜ: CẦN XÁC MINH LẠI</span><br>
-                Nội dung có chứa các yếu tố bất thường:<br>
-                <ul style="margin-left: 18px; margin-top: 6px;">${reasons.map(r => `<li>${r}</li>`).join('')}</ul>`;
-        } else {
-            box.innerHTML = `<span class="badge b-safe">✅ CHƯA PHÁT HIỆN DẤU HIỆU GIẢ MẠO RÕ RỆT</span><br>
-                Đường dẫn/nội dung không chứa các từ khóa lừa đảo hoặc tên miền độc hại phổ biến. Tuy nhiên hãy luôn kiểm tra kỹ tên miền chính xác trước khi nhập mật khẩu.`;
-        }
+        if (score >= 50) box.innerHTML = `<span class="badge b-danger">🚨 NGUY HIỂM CAO: LỪA ĐẢO / MÃ ĐỘC</span><ul style="margin-left:18px;margin-top:6px;">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+        else if (score >= 25) box.innerHTML = `<span class="badge b-warn">⚠️ ĐÁNG NGỜ</span><ul style="margin-left:18px;margin-top:6px;">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul>`;
+        else box.innerHTML = `<span class="badge b-safe">✅ AN TOÀN</span><br>Không phát hiện dấu hiệu giả mạo phổ biến.`;
     }
 
-    // Tab 3: Mật khẩu & Đồng hồ tấn công
     function checkPassword() {
         const pwd = document.getElementById('pwdInput').value;
         const box = document.getElementById('pwdResult');
-        if (!pwd) {
-            box.innerHTML = "Nhập mật khẩu để xem chỉ số Entropy và thời gian ước tính bẻ khóa.";
-            return;
-        }
+        if (!pwd) return;
         let pool = 0;
         if (/[a-z]/.test(pwd)) pool += 26;
         if (/[A-Z]/.test(pwd)) pool += 26;
         if (/[0-9]/.test(pwd)) pool += 10;
         if (/[^a-zA-Z0-9]/.test(pwd)) pool += 32;
-
         const entropy = Math.round(pwd.length * Math.log2(pool || 1));
-        let status = '', timeEst = '';
-        if (entropy < 45) {
-            status = '<span class="badge b-danger">RẤT YẾU (Dễ bị bẻ khóa tức thì)</span>';
-            timeEst = 'Vài giây đến vài phút';
-        } else if (entropy < 70) {
-            status = '<span class="badge b-warn">TRUNG BÌNH (Nên tăng độ dài >= 12 ký tự)</span>';
-            timeEst = 'Vài ngày đến vài tháng';
-        } else {
-            status = '<span class="badge b-safe">MẠNH (An toàn trước tấn công Brute-force)</span>';
-            timeEst = 'Hàng trăm năm';
-        }
-        box.innerHTML = `${status}<br>
-            • <strong>Độ dài:</strong> ${pwd.length} ký tự | <strong>Chỉ số Entropy:</strong> ${entropy} bits<br>
-            • <strong>Thời gian bẻ khóa ước tính:</strong> ${timeEst}<br>
-            • <strong>Khuyến nghị AI:</strong> Kết hợp cụm từ dễ nhớ + số + ký tự đặc biệt (VD: <code>Vku@DaNang#2026</code>) và luôn bật xác thực 2 lớp (2FA).`;
+        if (entropy < 45) box.innerHTML = `<span class="badge b-danger">RẤT YẾU (${entropy} bits)</span><br>Bị bẻ khóa trong vài giây đến vài phút.`;
+        else if (entropy < 70) box.innerHTML = `<span class="badge b-warn">TRUNG BÌNH (${entropy} bits)</span><br>Nên tăng độ dài >= 12 ký tự và thêm ký tự đặc biệt.`;
+        else box.innerHTML = `<span class="badge b-safe">MẠNH (${entropy} bits)</span><br>An toàn cao trước tấn công Brute-force.`;
     }
 
     function updateCyberClock() {
         const now = new Date();
         const h = now.getHours();
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        document.getElementById('cyberClock').innerText = `${String(h).padStart(2, '0')}:${m}:${s}`;
-
+        document.getElementById('cyberClock').innerText = now.toLocaleTimeString('vi-VN');
         const badge = document.getElementById('threatWindowBadge');
         const desc = document.getElementById('threatWindowDesc');
-
         if ((h >= 11 && h <= 13) || (h >= 20 && h <= 23)) {
             badge.className = 'badge b-danger';
-            badge.innerText = '🚨 CAO ĐIỂM LỪA ĐẢO NGƯỜI DÙNG (PHISHING / DEEPFAKE)';
-            desc.innerText = 'Đây là khung giờ nghỉ trưa / buổi tối muộn — thời điểm người dùng lướt mạng xã hội nhiều và dễ mất cảnh giác nhất trước các tin nhắn giả mạo ngân hàng, đơn hàng hoặc cuộc gọi Deepfake.';
+            badge.innerText = '🚨 CAO ĐIỂM LỪA ĐẢO CÁ NHÂN (PHISHING / DEEPFAKE)';
+            desc.innerText = 'Khung giờ nghỉ trưa / tối muộn — người dùng lướt mạng nhiều và dễ sập bẫy tin nhắn giả mạo.';
         } else if (h >= 0 && h < 4) {
             badge.className = 'badge b-danger';
-            badge.innerText = '🚨 CAO ĐIỂM TẤN CÔNG HỆ THỐNG (RANSOMWARE / BRUTE-FORCE)';
-            desc.innerText = 'Khung giờ 00h00 – 04h00 sáng là lúc quản trị viên hệ thống nghỉ ngơi, tin tặc thường kích hoạt mã độc mã hóa dữ liệu hoặc chạy công cụ dò quét mật khẩu tự động.';
+            badge.innerText = '🚨 CAO ĐIỂM TẤN CÔNG HỆ THỐNG (RANSOMWARE)';
+            desc.innerText = 'Khung giờ 00h00–04h00 sáng thường được tin tặc chọn để kích hoạt mã độc và dò quét hệ thống.';
         } else {
             badge.className = 'badge b-safe';
-            badge.innerText = '🛡️ KHUNG GIỜ HOẠT ĐỘNG BÌNH THƯỜNG';
-            desc.innerText = 'Duy trì thói quen kiểm tra đường link trước khi bấm, không dùng Wi-Fi công cộng mở để giao dịch tài chính và bật xác thực 2 lớp cho các tài khoản quan trọng.';
+            badge.innerText = '🛡️ KHUNG GIỜ BÌNH THƯỜNG';
+            desc.innerText = 'Duy trì thói quen kiểm tra link và bật 2FA cho các tài khoản quan trọng.';
         }
     }
     setInterval(updateCyberClock, 1000);
