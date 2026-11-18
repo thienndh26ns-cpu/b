@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CyberGuard AI - Hệ Thống Giám Sát An Toàn Thông Tin Thời Gian Thực</title>
+    <title>CyberGuard AI - Hệ Thống Phòng Thủ Thông Minh Thời Gian Thực</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ================= BIẾN MÀU 2 HÌNH THÁI (SÁNG & ĐÊM) ================= */
+        /* ================= BIẾN MÀU TỰ ĐỘNG THEO GIỜ THỰC TẾ ================= */
         :root {
-            /* Mặc định: Hình thái Đêm (Night Cyber Mode) */
-            --bg-main: #060b14;
-            --bg-gradient: radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.1) 0%, transparent 45%),
-                           radial-gradient(circle at 85% 80%, rgba(129, 140, 248, 0.1) 0%, transparent 45%);
-            --bg-card: rgba(17, 25, 40, 0.92);
-            --bg-sub: #09101d;
-            --bg-header: rgba(6, 11, 20, 0.92);
-            --border: rgba(56, 189, 248, 0.25);
+            /* Mặc định: Hình thái Đêm (18h00 - 05h59) - Chế độ Phòng Thủ */
+            --bg-main: #050914;
+            --bg-card: rgba(15, 23, 42, 0.92);
+            --bg-sub: #09101f;
+            --bg-header: rgba(5, 9, 20, 0.94);
+            --border: rgba(56, 189, 248, 0.3);
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
             --accent: #38bdf8;
@@ -23,18 +21,16 @@
             --safe: #10b981;
             --warn: #f59e0b;
             --danger: #f43f5e;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+            --shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
         }
 
-        /* Hình thái Sáng (Daylight Guardian Mode) */
+        /* Hình thái Ban Ngày (06h00 - 17h59) - Mặt Trời Chiếu Sáng */
         body.day-theme {
-            --bg-main: #f0f4f8;
-            --bg-gradient: radial-gradient(circle at 15% 15%, rgba(2, 132, 199, 0.08) 0%, transparent 50%),
-                           radial-gradient(circle at 85% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
-            --bg-card: rgba(255, 255, 255, 0.95);
+            --bg-main: #f0f7ff;
+            --bg-card: rgba(255, 255, 255, 0.96);
             --bg-sub: #f8fafc;
-            --bg-header: rgba(255, 255, 255, 0.92);
-            --border: rgba(2, 132, 199, 0.2);
+            --bg-header: rgba(255, 255, 255, 0.94);
+            --border: rgba(2, 132, 199, 0.22);
             --text-main: #0f172a;
             --text-muted: #475569;
             --accent: #0284c7;
@@ -42,16 +38,106 @@
             --safe: #059669;
             --warn: #d97706;
             --danger: #e11d48;
-            --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow: 0 10px 28px rgba(2, 132, 199, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.45s ease, color 0.35s ease, border-color 0.35s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; transition: background-color 0.5s ease, color 0.35s ease, border-color 0.35s ease; }
         body {
             background-color: var(--bg-main);
-            background-image: var(--bg-gradient);
             color: var(--text-main);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ================= HIỆU ỨNG MẶT TRỜI & KHIÊN PHÒNG THỦ LOGO ================= */
+        .logo-stage {
+            position: relative;
+            width: 240px;
+            height: 210px;
+            margin: 0 auto 10px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        /* Mặt trời (Chỉ hiện ban ngày) */
+        .sun-orb {
+            position: absolute;
+            top: 8px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fef08a 15%, #f59e0b 75%, #ea580c 100%);
+            box-shadow: 0 0 35px #f59e0b, 0 0 70px rgba(251, 191, 36, 0.7);
+            opacity: 0;
+            transform: translateY(30px) scale(0.6);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 1;
+        }
+        body.day-theme .sun-orb {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            animation: sunFloat 4s ease-in-out infinite;
+        }
+        @keyframes sunFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        /* Luồng ánh nắng chiếu từ Mặt Trời xuống Logo */
+        .sun-beams {
+            position: absolute;
+            top: 42px;
+            width: 210px;
+            height: 150px;
+            background: conic-gradient(from 155deg at 50% 0%, transparent 0deg, rgba(253, 224, 71, 0.45) 25deg, transparent 50deg);
+            clip-path: polygon(35% 0%, 65% 0%, 100% 100%, 0% 100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            z-index: 2;
+        }
+        body.day-theme .sun-beams { opacity: 1; }
+
+        /* Vòng hào quang Phòng Thủ Đêm (Chỉ hiện ban đêm) */
+        .night-defense-ring {
+            position: absolute;
+            bottom: 8px;
+            width: 146px;
+            height: 146px;
+            border-radius: 50%;
+            border: 2px dashed #38bdf8;
+            box-shadow: 0 0 28px rgba(56, 189, 248, 0.55), inset 0 0 22px rgba(129, 140, 248, 0.45);
+            opacity: 1;
+            animation: spinRadar 10s linear infinite;
+            z-index: 1;
+        }
+        .night-defense-ring::after {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(244, 63, 94, 0.55);
+            animation: pulseShield 2.2s ease-out infinite;
+        }
+        body.day-theme .night-defense-ring { opacity: 0; transform: scale(0.7); }
+
+        @keyframes spinRadar { 100% { transform: rotate(360deg); } }
+        @keyframes pulseShield { 0% { transform: scale(0.95); opacity: 0.9; } 100% { transform: scale(1.22); opacity: 0; } }
+
+        /* Khối Logo Khiên Trung Tâm */
+        .shield-emblem {
+            position: relative;
+            z-index: 3;
+            width: 112px;
+            height: 124px;
+            margin-bottom: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            filter: drop-shadow(0 0 18px rgba(56, 189, 248, 0.8));
+            transition: filter 0.6s ease, transform 0.4s ease;
+        }
+        body.day-theme .shield-emblem {
+            filter: drop-shadow(0 6px 18px rgba(245, 158, 11, 0.55));
         }
 
         /* ================= WELCOME SCREEN ================= */
@@ -63,45 +149,66 @@
             align-items: center;
             text-align: center;
             padding: 30px 20px;
-            position: relative;
+            background: radial-gradient(circle at 50% 25%, rgba(56, 189, 248, 0.14) 0%, transparent 55%);
         }
-        .theme-status-bar {
-            position: absolute; top: 20px; right: 24px;
-            display: flex; align-items: center; gap: 10px;
-            background: var(--bg-card); border: 1px solid var(--border);
-            padding: 8px 14px; border-radius: 999px; font-size: 0.85rem; box-shadow: var(--shadow);
+        body.day-theme #welcomeScreen {
+            background: radial-gradient(circle at 50% 18%, rgba(253, 224, 71, 0.35) 0%, rgba(186, 230, 253, 0.25) 45%, transparent 75%);
         }
-        .pill {
-            background: rgba(56, 189, 248, 0.14); color: var(--accent);
-            border: 1px solid var(--border); padding: 6px 16px; border-radius: 999px;
-            font-size: 0.85rem; font-weight: 600; margin-bottom: 18px;
+
+        .live-badge {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 6px 18px;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow);
+            color: var(--accent);
         }
         #welcomeScreen h1 {
-            font-size: 3.1rem; font-weight: 800;
+            font-size: 3.1rem;
+            font-weight: 800;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 14px; line-height: 1.2;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            line-height: 1.2;
         }
-        #welcomeScreen p { color: var(--text-muted); max-width: 680px; font-size: 1.08rem; margin-bottom: 30px; }
+        #welcomeScreen p { color: var(--text-muted); max-width: 680px; font-size: 1.06rem; margin-bottom: 28px; }
         .btn-primary {
             background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            color: #fff; border: none; padding: 15px 36px; font-size: 1.1rem; font-weight: 700;
-            border-radius: 999px; cursor: pointer; box-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
+            color: #fff; border: none; padding: 15px 38px; font-size: 1.1rem; font-weight: 700;
+            border-radius: 999px; cursor: pointer; box-shadow: 0 10px 26px rgba(2, 132, 199, 0.35);
             transition: transform 0.2s;
         }
         .btn-primary:hover { transform: translateY(-2px); }
-        .feature-pills { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 38px; }
-        .feature-pills span { background: var(--bg-card); border: 1px solid var(--border); padding: 8px 14px; border-radius: 10px; font-size: 0.86rem; color: var(--text-muted); box-shadow: var(--shadow); }
 
-        /* ================= MAIN APP & HEADER ================= */
+        /* ================= MAIN APP & MINI LOGO HEADER ================= */
         #mainApp { display: none; padding-bottom: 60px; }
         header {
             background: var(--bg-header); backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border); padding: 12px 20px;
+            border-bottom: 1px solid var(--border); padding: 10px 20px;
             position: sticky; top: 0; z-index: 100;
         }
         .header-inner { max-width: 1220px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .brand { font-size: 1.28rem; font-weight: 800; color: var(--accent); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .brand {
+            font-size: 1.25rem; font-weight: 800; color: var(--accent); cursor: pointer;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .mini-logo-icon {
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(56, 189, 248, 0.15);
+            border: 1.5px solid var(--accent);
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+        }
+        body.day-theme .mini-logo-icon {
+            background: radial-gradient(circle, #fef08a, #f59e0b);
+            border-color: #ea580c;
+            box-shadow: 0 0 14px rgba(245, 158, 11, 0.75);
+        }
+
         .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
         .tab-btn {
             background: transparent; color: var(--text-muted); border: 1px solid transparent;
@@ -109,17 +216,6 @@
         }
         .tab-btn:hover { color: var(--text-main); background: rgba(125, 125, 125, 0.08); }
         .tab-btn.active { background: rgba(56, 189, 248, 0.15); color: var(--accent); border-color: var(--border); }
-
-        .mode-switcher {
-            display: flex; align-items: center; gap: 6px;
-            background: var(--bg-sub); border: 1px solid var(--border);
-            padding: 5px 10px; border-radius: 999px; font-size: 0.82rem;
-        }
-        .mode-btn {
-            background: transparent; border: none; color: var(--text-muted);
-            cursor: pointer; padding: 3px 8px; border-radius: 999px; font-weight: 600;
-        }
-        .mode-btn.active-mode { background: var(--accent); color: #fff; }
 
         .container { max-width: 1220px; margin: 0 auto; padding: 24px 20px; }
         .tab-content { display: none; animation: fadeIn 0.35s ease; }
@@ -183,30 +279,52 @@
 
 <!-- ==================== MÀN HÌNH CHÀO ĐÓN ==================== -->
 <section id="welcomeScreen">
-    <div class="theme-status-bar">
-        <span id="welcomeClock" style="font-weight: 700; color: var(--accent);">00:00:00</span>
-        <span>|</span>
-        <span id="welcomeThemeLabel">🌙 Chế độ Đêm</span>
-        <button class="sample-btn" style="margin:0; padding:3px 8px;" onclick="cycleThemeMode()">Đổi Sáng/Đêm</button>
+    <!-- Sân khấu Logo: Mặt trời chiếu sáng ban ngày / Vòng giáp phòng thủ ban đêm -->
+    <div class="logo-stage">
+        <div class="sun-orb"></div>
+        <div class="sun-beams"></div>
+        <div class="night-defense-ring"></div>
+        <div class="shield-emblem">
+            <!-- SVG Logo Khiên CyberGuard -->
+            <svg width="104" height="116" viewBox="0 0 100 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="shieldGrad" x1="10" y1="5" x2="90" y2="105" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#38bdf8"/>
+                        <stop offset="50%" stop-color="#4f46e5"/>
+                        <stop offset="100%" stop-color="#0f172a"/>
+                    </linearGradient>
+                    <linearGradient id="shieldBorder" x1="0" y1="0" x2="100" y2="112" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#fde047"/>
+                        <stop offset="50%" stop-color="#38bdf8"/>
+                        <stop offset="100%" stop-color="#f43f5e"/>
+                    </linearGradient>
+                </defs>
+                <path d="M50 4L10 20V52C10 79.5 27.1 103.8 50 109C72.9 103.8 90 79.5 90 52V20L50 4Z" fill="url(#shieldGrad)" stroke="url(#shieldBorder)" stroke-width="4"/>
+                <!-- Mạch điện tử & Ổ khóa AI bên trong khiên -->
+                <path d="M50 26C42.8 26 37 31.8 37 39V45H63V39C63 31.8 57.2 26 50 26Z" stroke="#f8fafc" stroke-width="4" stroke-linecap="round"/>
+                <rect x="31" y="45" width="38" height="30" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="3"/>
+                <circle cx="50" cy="58" r="4" fill="#38bdf8"/>
+                <path d="M50 62V68" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
     </div>
 
-    <div class="pill">🛡️ Đồ án Nhập môn ngành & Kỹ năng mềm – Khoa KTMT&ĐT (VKU)</div>
+    <div class="live-badge" id="welcomeStatusPill">⏱️ Đang đồng bộ thời gian thực...</div>
     <h1>CyberGuard AI</h1>
     <p>
-        Hệ thống Phòng vệ Thông minh Đa Hình Thái (Tự động chuyển đổi Sáng / Đêm theo thời gian thực) — Giám sát rủi ro mạng công cộng, huấn luyện nhận diện bẫy lừa đảo và ứng cứu sự cố 60 giây.
+        Hệ thống Giám sát & Phòng vệ An toàn Thông tin Thời Gian Thực — Ban ngày soi sáng nhận diện rủi ro mạng công cộng, ban đêm kích hoạt lá chắn phòng thủ cao độ trước Phishing & Ransomware.
     </p>
     <button class="btn-primary" onclick="startSystem()">🚀 Khởi chạy Hệ thống Phòng vệ</button>
-    <div class="feature-pills">
-        <span>☀️ Ban ngày (06h–18h): Phòng vệ Mạng & Công việc</span>
-        <span>🌙 Ban đêm (18h–06h): Cảnh giác Cao độ Phishing & Ransomware</span>
-    </div>
 </section>
 
 <!-- ==================== ỨNG DỤNG CHÍNH ==================== -->
 <div id="mainApp">
     <header>
         <div class="header-inner">
-            <div class="brand" onclick="goWelcome()">🛡️ CyberGuard AI</div>
+            <div class="brand" onclick="goWelcome()" title="Quay lại màn hình Logo chính">
+                <div class="mini-logo-icon" id="headerMiniIcon">🛡️</div>
+                <span>CyberGuard AI</span>
+            </div>
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('sandboxQuizTab', this)">1. Sandbox & Radar Kỹ Năng</button>
                 <button class="tab-btn" onclick="switchTab('sosAiTab', this)">2. Ứng Cứu 60s & Chatbot AI</button>
@@ -214,20 +332,14 @@
                 <button class="tab-btn" onclick="switchTab('pwdClockTab', this)">4. Mật Khẩu & Giờ Tấn Công</button>
                 <button class="tab-btn" onclick="switchTab('intelTab', this)">5. Kiến Trúc & Thực Tiễn</button>
             </div>
-            <!-- Bộ chuyển 2 hình thái Sáng / Đêm / Tự động -->
-            <div class="mode-switcher" title="Tự động đổi Sáng/Đêm theo giờ thực hoặc bấm chọn để Demo">
-                <button id="btnAuto" class="mode-btn active-mode" onclick="setThemePreference('auto')">⏱️ Auto</button>
-                <button id="btnDay" class="mode-btn" onclick="setThemePreference('day')">☀️ Sáng</button>
-                <button id="btnNight" class="mode-btn" onclick="setThemePreference('night')">🌙 Đêm</button>
-            </div>
+            <div style="font-weight: 800; color: var(--accent); font-size: 0.98rem;" id="headerLiveClock">00:00:00</div>
         </div>
     </header>
 
     <div class="container">
-        <!-- Banner trạng thái hình thái thời gian thực -->
+        <!-- Banner trạng thái tự động theo thời gian thực -->
         <div id="modeBanner" style="background: var(--bg-card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; box-shadow: var(--shadow);">
             <div id="modeBannerText" style="font-size: 0.92rem;"></div>
-            <div id="headerLiveClock" style="font-weight: 800; color: var(--accent); font-size: 1.05rem;">00:00:00</div>
         </div>
 
         <!-- TAB 1: SANDBOX & RADAR -->
@@ -402,7 +514,8 @@
 
         <footer>
             <strong>Dự án Học phần: Nhập môn ngành & Kỹ năng mềm (Học kỳ 1, 2026–2027)</strong><br>
-            Khoa Kỹ thuật Máy tính & Điện tử – Trường ĐH CNTT & Truyền thông Việt - Hàn (VKU) | GVHD: TS. Hoàng Hữu Đức
+            Khoa Kỹ thuật Máy tính & Điện tử – Trường ĐH CNTT & Truyền thông Việt - Hàn (VKU) | GVHD: TS. Hoàng Hữu Đức<br>
+            <span style="font-size: 0.78rem; opacity: 0.7; cursor: pointer;" onclick="toggleDemoSim()">[Chế độ kiểm thử Demo Sáng/Đêm cho Thuyết trình]</span>
         </footer>
     </div>
 
@@ -410,47 +523,45 @@
 </div>
 
 <script>
-    // ================= 1. HỆ THỐNG 2 HÌNH THÁI SÁNG / ĐÊM THEO THỜI GIAN THỰC =================
-    let themePref = 'auto'; // 'auto' | 'day' | 'night'
+    // ================= TỰ ĐỘNG ĐỒNG BỘ MẶT TRỜI (NGÀY) & PHÒNG THỦ (ĐÊM) =================
+    let demoOverride = null; // null = chạy 100% theo giờ thực tế
 
-    function setThemePreference(mode) {
-        themePref = mode;
-        document.getElementById('btnAuto').classList.toggle('active-mode', mode === 'auto');
-        document.getElementById('btnDay').classList.toggle('active-mode', mode === 'day');
-        document.getElementById('btnNight').classList.toggle('active-mode', mode === 'night');
-        applyRealtimeTheme();
+    function toggleDemoSim() {
+        if (demoOverride === null) {
+            const isCurrentlyDay = (new Date().getHours() >= 6 && new Date().getHours() < 18);
+            demoOverride = !isCurrentlyDay;
+        } else {
+            demoOverride = null;
+        }
+        syncSolarDefenseMode();
     }
 
-    function cycleThemeMode() {
-        if (themePref === 'auto' || themePref === 'night') setThemePreference('day');
-        else setThemePreference('night');
-    }
-
-    function applyRealtimeTheme() {
+    function syncSolarDefenseMode() {
         const now = new Date();
         const h = now.getHours();
         const timeStr = now.toLocaleTimeString('vi-VN');
 
-        document.getElementById('welcomeClock').innerText = timeStr;
         document.getElementById('headerLiveClock').innerText = timeStr;
         document.getElementById('cyberClock').innerText = timeStr;
 
-        // Xác định hình thái Sáng (06h - 17h59) hay Đêm (18h - 05h59)
+        // Tự động xác định Ngày (06:00 - 17:59) hoặc Đêm (18:00 - 05:59)
         let isDay = (h >= 6 && h < 18);
-        if (themePref === 'day') isDay = true;
-        if (themePref === 'night') isDay = false;
+        if (demoOverride !== null) isDay = demoOverride;
 
+        const pill = document.getElementById('welcomeStatusPill');
+        const miniIcon = document.getElementById('headerMiniIcon');
         const bannerText = document.getElementById('modeBannerText');
-        const welcomeLabel = document.getElementById('welcomeThemeLabel');
 
         if (isDay) {
             document.body.classList.add('day-theme');
-            welcomeLabel.innerText = '☀️ Hình thái Sáng (Daylight Mode)';
-            bannerText.innerHTML = '☀️ <strong>Hình thái Ban Ngày (06h00 – 17h59):</strong> Giao diện sáng tối ưu cho môi trường học tập/làm việc. Tập trung phòng vệ <i>Wi-Fi công cộng, Email công việc & Giao dịch trực tuyến</i>.';
+            pill.innerHTML = `☀️ ${timeStr} | Chế độ Ánh Sáng Giám Sát Ban Ngày`;
+            miniIcon.innerText = '☀️';
+            bannerText.innerHTML = '☀️ <strong>Trạng thái Ban Ngày (06h00 – 17h59):</strong> Mặt trời chiếu sáng biểu tượng — Hệ thống tập trung soi sáng rủi ro <i>Wi-Fi công cộng, Email công việc & Giao dịch trực tuyến</i>.';
         } else {
             document.body.classList.remove('day-theme');
-            welcomeLabel.innerText = '🌙 Hình thái Đêm (Night Threat Mode)';
-            bannerText.innerHTML = '🌙 <strong>Hình thái Ban Đêm (18h00 – 05h59):</strong> Kích hoạt chế độ bảo vệ mắt & <b>Cảnh giác Cao độ</b> — Khung giờ cao điểm của lừa đảo Phishing (20h–23h) và tấn công Ransomware (00h–04h).';
+            pill.innerHTML = `🛡️ ${timeStr} | Kích Hoạt Lá Chắn Phòng Thủ Ban Đêm`;
+            miniIcon.innerText = '🛡️';
+            bannerText.innerHTML = '🛡️ <strong>Chế độ Phòng Thủ Ban Đêm (18h00 – 05h59):</strong> Khiên năng lượng đã kích hoạt — Cảnh giác cao độ trước <b>Lừa đảo Phishing (20h–23h)</b> và <b>Tấn công Ransomware (00h–04h)</b>.';
         }
 
         // Cập nhật cảnh báo khung giờ chi tiết
@@ -471,10 +582,10 @@
         }
     }
 
-    setInterval(applyRealtimeTheme, 1000);
-    applyRealtimeTheme();
+    setInterval(syncSolarDefenseMode, 1000);
+    syncSolarDefenseMode();
 
-    // ================= 2. ĐIỀU HƯỚNG & CHỨC NĂNG LÕI =================
+    // ================= ĐIỀU HƯỚNG & CHỨC NĂNG LÕI =================
     function startSystem() {
         document.getElementById('welcomeScreen').style.display = 'none';
         document.getElementById('mainApp').style.display = 'block';
