@@ -162,7 +162,7 @@
         .tier-card:hover:not(.locked) { transform: translateY(-3px); }
         .tier-card h3 { font-size: 1.02rem; margin: 6px 0 4px; }
         .tier-card p { font-size: 0.84rem; color: var(--text-muted); }
-        .tier-card.locked { opacity: 0.6; cursor: not-allowed; border-style: dashed; }
+        .tier-card.locked { opacity: 0.58; cursor: not-allowed; border-style: dashed; user-select: none; }
         .lock-banner { margin-top: 10px; padding: 5px 9px; border-radius: 8px; background: rgba(244, 63, 94, 0.14); color: var(--danger); font-size: 0.78rem; font-weight: 700; }
         .unlock-banner { margin-top: 10px; padding: 5px 9px; border-radius: 8px; background: rgba(16, 185, 129, 0.14); color: var(--safe); font-size: 0.78rem; font-weight: 700; }
 
@@ -220,6 +220,16 @@
         .b-warn { background: rgba(245, 158, 11, 0.15); color: var(--warn); border: 1px solid var(--warn); }
         .b-danger { background: rgba(244, 63, 94, 0.18); color: var(--danger); border: 1px solid var(--danger); }
         footer { text-align: center; padding: 18px 10px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 24px; }
+
+        /* Modal xác thực Admin ẩn (Chỉ gọi bằng phím tắt Ctrl + Shift + L) */
+        .admin-modal-backdrop {
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .admin-modal-box {
+            background: var(--bg-card); border: 2px solid #a855f7; border-radius: 16px;
+            padding: 22px; width: 340px; max-width: 90vw; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
     </style>
 </head>
 <body>
@@ -311,7 +321,7 @@
 
     <!-- Main Workspace -->
     <main class="main-workspace">
-        <!-- TAB 1: VƯỢT ẢI 3 TẦNG -->
+        <!-- TAB 1: VƯỢT ẢI 3 TẦNG (ĐÃ KHÓA CHẶT PHÂN QUYỀN, KHÔNG CÓ NÚT MỞ KHÓA LỘ THIÊN) -->
         <div id="gameTab" class="tab-content active">
             <div class="card" style="border-top: 3px solid #f59e0b;">
                 <div class="section-header-box">
@@ -333,14 +343,14 @@
                         <span class="badge b-warn">TẦNG 2 • KHÁ</span>
                         <h3>🟡 Giả Mạo & Đường Dẫn</h3>
                         <p>Tên miền <code>.xyz</code>, tệp <code>.apk</code> & bẫy Wi-Fi.</p>
-                        <div class="lock-banner" id="statusTier2">🔒 Cần ≥ 7/10 Tầng 1</div>
+                        <div class="lock-banner" id="statusTier2">🔒 Đã khóa • Cần ≥ 7/10 Tầng 1</div>
                     </div>
 
                     <div class="tier-card locked" id="cardTier3" onclick="tryStartTier(3)">
                         <span class="badge b-danger">TẦNG 3 • KHÓ</span>
                         <h3>🔴 Chuyên Sâu An Ninh Mạng</h3>
                         <p>Session Cookie, Infostealer, Evil Twin & Entropy.</p>
-                        <div class="lock-banner" id="statusTier3">🔒 Cần ≥ 7/10 Tầng 2</div>
+                        <div class="lock-banner" id="statusTier3">🔒 Đã khóa • Cần ≥ 7/10 Tầng 2</div>
                     </div>
                 </div>
 
@@ -381,11 +391,6 @@
                     <div style="max-width: 320px; margin: 0 auto 14px;"><canvas id="gameRadarChart"></canvas></div>
                     <button class="sample-btn" onclick="resetToTiers()">🗺️ Bản đồ 3 Tầng</button>
                     <button class="action-btn" id="nextTierJumpBtn" style="display: none;" onclick="jumpNextUnlockedTier()">🚀 Tầng tiếp theo</button>
-                </div>
-
-                <div style="text-align: right; margin-top: 8px;">
-                    <span style="font-size: 0.74rem; color: var(--text-muted); cursor: pointer;" onclick="demoUnlockAll()">[Mở khóa Demo]</span>
-                    <span style="font-size: 0.74rem; color: var(--text-muted); cursor: pointer; margin-left: 8px;" onclick="resetLocks()">[Khóa lại]</span>
                 </div>
             </div>
         </div>
@@ -511,7 +516,6 @@
 
         <footer>
             CyberGuard AI • Khoa Kỹ thuật Máy tính & Điện tử (VKU) • GVHD: TS. Hoàng Hữu Đức
-            <span style="margin-left: 8px; cursor: pointer; text-decoration: underline;" onclick="toggleDemoSim()">[Đổi Sáng/Đêm]</span>
         </footer>
     </main>
 
@@ -521,6 +525,24 @@
         <div style="flex: 1;">
             <strong id="aiNarratorTitle" style="color: #c084fc; font-size: 0.92rem; display: block; margin-bottom: 3px;">CyberGuard AI</strong>
             <p id="aiNarratorText" style="font-size: 0.86rem; line-height: 1.4;"></p>
+        </div>
+    </div>
+
+    <!-- HỘP XÁC THỰC QUẢN TRỊ VIÊN ẨN (CHỈ MỞ BẰNG PHÍM TẮT CTRL + SHIFT + L) -->
+    <div id="adminAuthModal" class="admin-modal-backdrop">
+        <div class="admin-modal-box">
+            <h3 style="margin-bottom: 8px; color: #c084fc;">🔐 Xác thực Quyền Quản Trị</h3>
+            <p style="font-size: 0.83rem; color: var(--text-muted); margin-bottom: 12px;">Nhập Mã PIN Admin để điều khiển trạng thái khóa tầng hoặc chế độ trình chiếu.</p>
+            <input type="password" id="adminPinInput" placeholder="Nhập mã PIN..." onkeypress="if(event.key==='Enter') verifyAdminPin()">
+            <div id="adminActionsArea" style="display: none; margin-bottom: 12px;">
+                <button class="emerald-btn" style="width: 100%; margin-bottom: 8px;" onclick="adminUnlockAll()">🔓 Mở khóa cả 3 Tầng (Demo)</button>
+                <button class="danger-btn" style="width: 100%; margin-bottom: 8px;" onclick="adminRelockAll()">🔒 Khóa lại về Tầng 1</button>
+                <button class="action-btn" style="width: 100%;" onclick="toggleDemoSim()">☀️/🛡️ Đổi chế độ Ngày/Đêm</button>
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <button class="sample-btn" style="margin: 0;" onclick="closeAdminModal()">Đóng</button>
+                <button class="action-btn" id="adminVerifyBtn" onclick="verifyAdminPin()">Xác nhận</button>
+            </div>
         </div>
     </div>
 </div>
@@ -618,11 +640,89 @@
         ]
     };
 
-    // ================= 3. LOGIC TRÒ CHƠI & KHÓA TẦNG =================
-    let unlockedLevel = parseInt(localStorage.getItem('cyberguard_unlocked_tier') || '1');
+    // ================= 3. HỆ THỐNG KHÓA TẦNG CHỐNG GIAN LẬN + XÁC THỰC ADMIN =================
+    const ADMIN_SECRET_PIN = "VKU2026"; // Mã PIN bí mật của bạn
+    const SIGN_SALT = "CG_VKU_SEC_2026_";
+
+    function computeSignature(lvl) {
+        let hash = 0;
+        const str = SIGN_SALT + String(lvl);
+        for (let i = 0; i < str.length; i++) {
+            hash = ((hash << 5) - hash) + str.charCodeAt(i);
+            hash |= 0;
+        }
+        return String(hash);
+    }
+
+    function loadVerifiedLevel() {
+        const rawLvl = parseInt(localStorage.getItem('cg_lvl') || '1');
+        const sig = localStorage.getItem('cg_sig') || '';
+        if (rawLvl >= 1 && rawLvl <= 3 && computeSignature(rawLvl) === sig) {
+            return rawLvl;
+        }
+        // Nếu người dùng tự ý sửa localStorage trên trình duyệt -> tự động khóa về Tầng 1
+        saveVerifiedLevel(1);
+        return 1;
+    }
+
+    function saveVerifiedLevel(lvl) {
+        const safeLvl = Math.min(3, Math.max(1, lvl));
+        localStorage.setItem('cg_lvl', String(safeLvl));
+        localStorage.setItem('cg_sig', computeSignature(safeLvl));
+        unlockedLevel = safeLvl;
+    }
+
+    let unlockedLevel = loadVerifiedLevel();
     let currentTier = 1, currentIdx = 0, score = 0, winStreak = 0, loseStreak = 0, aiTimer = null;
 
+    // Lắng nghe tổ hợp phím bí mật Ctrl + Shift + L để mở bảng Admin
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && (e.key === 'L' || e.key === 'l')) {
+            e.preventDefault();
+            openAdminModal();
+        }
+    });
+
+    function openAdminModal() {
+        document.getElementById('adminAuthModal').style.display = 'flex';
+        document.getElementById('adminPinInput').value = '';
+        document.getElementById('adminActionsArea').style.display = 'none';
+        document.getElementById('adminVerifyBtn').style.display = 'inline-block';
+        document.getElementById('adminPinInput').focus();
+    }
+
+    function closeAdminModal() {
+        document.getElementById('adminAuthModal').style.display = 'none';
+    }
+
+    function verifyAdminPin() {
+        const val = document.getElementById('adminPinInput').value.trim();
+        if (val === ADMIN_SECRET_PIN) {
+            document.getElementById('adminActionsArea').style.display = 'block';
+            document.getElementById('adminVerifyBtn').style.display = 'none';
+        } else {
+            alert("❌ Sai mã PIN quản trị! Quyền truy cập bị từ chối.");
+            closeAdminModal();
+        }
+    }
+
+    function adminUnlockAll() {
+        saveVerifiedLevel(3);
+        updateTierCardsUI();
+        closeAdminModal();
+        showAiNarrator(true, "Đã xác thực Quản trị viên: Mở khóa toàn bộ 3 Tầng cấp độ.");
+    }
+
+    function adminRelockAll() {
+        saveVerifiedLevel(1);
+        updateTierCardsUI();
+        resetToTiers();
+        closeAdminModal();
+        showAiNarrator(false, "Đã khóa lại hệ thống về Tầng 1 mặc định.");
+    }
+
     function updateTierCardsUI() {
+        unlockedLevel = loadVerifiedLevel();
         for (let t = 1; t <= 3; t++) {
             const card = document.getElementById(`cardTier${t}`);
             const status = document.getElementById(`statusTier${t}`);
@@ -633,14 +733,15 @@
             } else {
                 card.classList.add('locked');
                 status.className = 'lock-banner';
-                status.innerText = `🔒 Cần ≥ 7/10 Tầng ${t - 1}`;
+                status.innerText = `🔒 Đã khóa • Cần ≥ 7/10 Tầng ${t - 1}`;
             }
         }
     }
 
     function tryStartTier(tier) {
+        unlockedLevel = loadVerifiedLevel();
         if (tier > unlockedLevel) {
-            showAiNarrator(false, `Tầng ${tier} đang khóa! Đạt tối thiểu 7/10 câu Tầng ${tier - 1} để mở.`);
+            showAiNarrator(false, `Quyền truy cập bị từ chối! Tầng ${tier} đang khóa, bạn phải vượt qua Tầng ${tier - 1} với số điểm ≥ 7/10.`);
             return;
         }
         currentTier = tier; currentIdx = 0; score = 0; winStreak = 0; loseStreak = 0;
@@ -651,9 +752,6 @@
         document.getElementById('quizTierTitle').innerText = names[tier];
         renderQuestion();
     }
-
-    function demoUnlockAll() { unlockedLevel = 3; localStorage.setItem('cyberguard_unlocked_tier', '3'); updateTierCardsUI(); }
-    function resetLocks() { unlockedLevel = 1; localStorage.setItem('cyberguard_unlocked_tier', '1'); updateTierCardsUI(); resetToTiers(); }
 
     function resetToTiers() {
         hideAiNarrator(); updateTierCardsUI();
@@ -752,8 +850,7 @@
             document.getElementById('finalCertBadge').innerHTML = `<span class="badge b-safe">🏅 VƯỢT ẢI THÀNH CÔNG</span>`;
             if (currentTier < 3) {
                 if (unlockedLevel < currentTier + 1) {
-                    unlockedLevel = currentTier + 1;
-                    localStorage.setItem('cyberguard_unlocked_tier', String(unlockedLevel));
+                    saveVerifiedLevel(currentTier + 1);
                 }
                 document.getElementById('unlockNoticeText').innerText = `🔓 Đã mở khóa Tầng ${currentTier + 1}!`;
                 nextTierBtn.style.display = 'inline-block';
@@ -783,7 +880,7 @@
     function jumpNextUnlockedTier() { if (currentTier < 3 && unlockedLevel >= currentTier + 1) tryStartTier(currentTier + 1); }
     updateTierCardsUI();
 
-    // ================= 4. CHATBOT AI STREAMING (PYTHON BACKEND + DIRECT GEMINI + OFFLINE NLP) =================
+    // ================= 4. CHATBOT AI STREAMING =================
     let savedGeminiKey = localStorage.getItem('cyberguard_gemini_key') || '';
 
     function toggleApiKeyPanel() {
@@ -822,7 +919,6 @@
         const aiMsgDiv = appendChatMsg('ai', '<span style="opacity:0.6;">▌</span>');
         const chatBox = document.getElementById('aiChatBox');
 
-        // Ưu tiên 1: Gọi Backend Python Streaming (http://127.0.0.1:8000/api/chat-stream)
         try {
             const res = await fetch('http://127.0.0.1:8000/api/chat-stream', {
                 method: 'POST',
@@ -843,9 +939,8 @@
                 aiMsgDiv.innerHTML = fullText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
                 return;
             }
-        } catch (e) { /* Chuyển sang bước 2 nếu chưa bật server.py */ }
+        } catch (e) {}
 
-        // Ưu tiên 2: Gọi trực tiếp Gemini API nếu người dùng đã dán Key trên web
         if (savedGeminiKey) {
             try {
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${encodeURIComponent(savedGeminiKey)}`, {
@@ -865,7 +960,6 @@
             } catch (e) {}
         }
 
-        // Ưu tiên 3: Hiệu ứng gõ chữ mượt mà từ bộ não Offline NLP
         const offlineReply = generateIntelligentResponse(text);
         let idx = 0;
         const typeInterval = setInterval(() => {
@@ -916,6 +1010,7 @@
     function toggleDemoSim() {
         demoOverride = (demoOverride === null) ? !(new Date().getHours() >= 6 && new Date().getHours() < 18) : null;
         syncSolarDefenseMode();
+        closeAdminModal();
     }
 
     function syncSolarDefenseMode() {
